@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # static files on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -55,11 +56,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'school_website.wsgi.application'
 
 # ── Neon PostgreSQL ───────────────────────────────────────────
-# Temporarily change settings.py back to SQLite
 DATABASES = {
     'default': dj_database_url.parse(
         os.getenv('DATABASE_URL'),
-        conn_max_age=0,        # change 600 to 0
+        conn_max_age=0,
         conn_health_checks=True,
     )
 }
@@ -87,11 +87,13 @@ TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# ── Static & Media ────────────────────────────────────────────
+# ── Static Files ──────────────────────────────────────────────
 STATIC_URL = '/static/'
 STATICFILES_DIRS = []
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# ── Media ─────────────────────────────────────────────────────
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
