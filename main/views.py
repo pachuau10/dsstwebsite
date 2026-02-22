@@ -23,6 +23,10 @@ def home(request):
     }
     return render(request, 'main/home.html', context)
 
+def lab_detail(request, pk):
+    lab = get_object_or_404(Lab, pk=pk)
+    return render(request, 'main/lab_detail.html', {'lab': lab})
+
 
 def notice_board(request):
     post_type = request.GET.get('type', '')
