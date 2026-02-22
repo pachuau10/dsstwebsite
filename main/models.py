@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
-from cloudinary_storage.storage import MediaCloudinaryStorage
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 class Post(models.Model):
     POST_TYPES = [
@@ -21,7 +21,7 @@ class Post(models.Model):
     is_pinned = models.BooleanField(default=False)
     document = models.FileField(
     upload_to='documents/',
-    storage=MediaCloudinaryStorage(),
+    storage=RawMediaCloudinaryStorage(),
     blank=True,
     null=True
     )
