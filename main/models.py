@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 class Post(models.Model):
     POST_TYPES = [
@@ -18,7 +19,12 @@ class Post(models.Model):
     is_published = models.BooleanField(default=True)
     image = CloudinaryField('image', folder='posts/', blank=True, null=True)
     is_pinned = models.BooleanField(default=False)
-
+    document = models.FileField(
+    upload_to='documents/',
+    storage=MediaCloudinaryStorage(),
+    blank=True,
+    null=True
+    )
     class Meta:
         ordering = ['-is_pinned', '-created_at']
 

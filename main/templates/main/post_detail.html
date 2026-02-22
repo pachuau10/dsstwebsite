@@ -37,7 +37,20 @@
                         <div style="line-height:1.9; color:#444; font-size:1rem;">
                             {{ post.content|linebreaks }}
                         </div>
-                        {% if post.updated_at != post.created_at %}
+                        {% if post.document %}
+                        <div class="mt-4 p-4 rounded" style="background:#f1f5ff; border:1px solid #dbe5ff;">
+                            <h6 class="fw-600 mb-3" style="color:#1a3a6e;">
+                                <i class="fas fa-file-pdf me-2 text-danger"></i>
+                                Attached Document
+                            </h6>
+                            <a href="{{ post.document.url }}" target="_blank"
+                            class="btn btn-danger rounded-pill">
+                                <i class="fas fa-download me-2"></i>
+                                Download PDF
+                            </a>
+                        </div>
+                        {% endif %}
+                                                {% if post.updated_at != post.created_at %}
                         <div class="mt-4 pt-4 border-top" style="font-size:0.82rem; color:#999;">
                             <i class="fas fa-edit me-1"></i>Last updated: {{ post.updated_at|date:"d F Y h:i A" }}
                         </div>
