@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from cloudinary.models import CloudinaryField
 
 class Post(models.Model):
     POST_TYPES = [
@@ -16,7 +16,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='posts/', blank=True, null=True)
+    image = CloudinaryField('image', folder='posts/', blank=True, null=True)
     is_pinned = models.BooleanField(default=False)
 
     class Meta:
@@ -67,7 +67,7 @@ class GalleryCategory(models.Model):
 class GalleryImage(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='gallery/')
+    image = CloudinaryField('image', folder='gallery/')
     category = models.ForeignKey(GalleryCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='images')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     is_featured = models.BooleanField(default=False)
@@ -108,7 +108,7 @@ class Teacher(models.Model):
     experience_years = models.IntegerField(default=0)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=15, blank=True)
-    photo = models.ImageField(upload_to='teachers/', blank=True, null=True)
+    photo = CloudinaryField('photo', folder='teachers/', blank=True, null=True)
     bio = models.TextField(blank=True)
     subjects = models.CharField(max_length=200, blank=True)
     achievements = models.TextField(blank=True)
@@ -139,7 +139,7 @@ class Lab(models.Model):
     capacity = models.IntegerField(default=0)
     equipment = models.TextField(blank=True, help_text='One per line')
     location = models.CharField(max_length=100, blank=True)
-    image = models.ImageField(upload_to='labs/', blank=True, null=True)
+    image = CloudinaryField('image', folder='labs/', blank=True, null=True)
     is_featured = models.BooleanField(default=True)
     incharge = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, blank=True, related_name='labs_incharge')
     order = models.IntegerField(default=0)
@@ -170,7 +170,7 @@ class Achievement(models.Model):
     winner_name = models.CharField(max_length=200, blank=True)
     winner_class = models.CharField(max_length=50, blank=True)
     year = models.IntegerField(default=2024)
-    image = models.ImageField(upload_to='achievements/', blank=True, null=True)
+    image = CloudinaryField('image', folder='achievements/', blank=True, null=True)
     is_featured = models.BooleanField(default=False)
 
     class Meta:
