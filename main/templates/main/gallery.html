@@ -1,0 +1,129 @@
+{% extends 'main/base.html' %}
+{% block title %}Gallery – DSST{% endblock %}
+{% block og_title %}Gallery – DSST{% endblock %}
+{% block og_description %}Photos and memories from events, activities, and campus life at DSST, Aizawl.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gallery-grid { columns: 4; column-gap: 12px; }
+    @media(max-width:992px) { .gallery-grid { columns: 3; } }
+    @media(max-width:768px) { .gallery-grid { columns: 2; } }
+    @media(max-width:480px) { .gallery-grid { columns: 2; column-gap: 8px; } }
+    .gallery-item { break-inside: avoid; margin-bottom: 12px; position: relative; overflow: hidden; border-radius: 10px; cursor: pointer; }
+    .gallery-item img { width: 100%; display: block; transition: transform 0.4s; }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 12px; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay span { color: white; font-size: 0.82rem; font-weight: 600; }
+    .gallery-placeholder { background: linear-gradient(135deg, #e8f4fd, #d0e8ff); display: flex; align-items: center; justify-content: center; min-height: 150px; color: #1a3a6e; font-size: 2rem; border-radius: 10px; }
+    .cat-btn { border: 2px solid #ddd; border-radius: 25px; padding: 7px 18px; font-size: 0.83rem; font-weight: 500; text-decoration: none; color: #555; display: inline-block; margin: 3px; transition: all 0.25s; }
+    .cat-btn:hover, .cat-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+    /* Lightbox */
+    .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:10000; align-items:center; justify-content:center; flex-direction:column; }
+    .lightbox.open { display:flex; }
+    .lightbox img { max-width:90vw; max-height:80vh; border-radius:8px; object-fit:contain; }
+    .lightbox-caption { color:white; margin-top:12px; font-size:0.9rem; }
+    .lightbox-close { position:absolute; top:20px; right:25px; color:white; font-size:1.8rem; cursor:pointer; background:none; border:none; }
+    .lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); color:white; font-size:2rem; cursor:pointer; background:rgba(255,255,255,0.1); border:none; padding:10px 16px; border-radius:50%; transition:background 0.2s; }
+    .lightbox-nav:hover { background:rgba(255,255,255,0.25); }
+    .lightbox-prev { left:15px; }
+    .lightbox-next { right:15px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item active text-white">Gallery</li></ol></nav>
+        <h1 style="font-family:'Playfair Display',serif;" class="mb-1">📸 School Gallery</h1>
+        <p style="color:rgba(255,255,255,0.8);">A glimpse into life at Greenwood — events, sports, academics, and unforgettable moments.</p>
+    </div>
+</div>
+
+<section class="section-py">
+    <div class="container">
+        <!-- Category Filters -->
+        <div class="text-center mb-5">
+            <a href="/gallery/" class="cat-btn {% if not cat_slug %}active{% endif %}">🌟 All Photos</a>
+            {% for cat in categories %}
+            <a href="/gallery/?cat={{ cat.slug }}" class="cat-btn {% if cat_slug == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+            {% endfor %}
+        </div>
+
+        {% if page_obj %}
+        <div class="gallery-grid" id="galleryGrid">
+            {% for img in page_obj %}
+            <div class="gallery-item" onclick="openLightbox({{ forloop.counter0 }})">
+                {% if img.image %}
+                <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+                {% else %}
+                <div class="gallery-placeholder"><i class="fas fa-image"></i></div>
+                {% endif %}
+                <div class="gallery-overlay"><span>{{ img.title }}</span></div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-5"><ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if cat_slug %}&cat={{ cat_slug }}{% endif %}">‹ Prev</a></li>{% endif %}
+            {% for n in page_obj.paginator.page_range %}<li class="page-item {% if n == page_obj.number %}active{% endif %}"><a class="page-link" href="?page={{ n }}{% if cat_slug %}&cat={{ cat_slug }}{% endif %}">{{ n }}</a></li>{% endfor %}
+            {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if cat_slug %}&cat={{ cat_slug }}{% endif %}">Next ›</a></li>{% endif %}
+        </ul></nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-camera fa-3x text-muted mb-3 d-block"></i>
+            <h5 class="text-muted">No photos yet in this category</h5>
+            <a href="/gallery/" class="btn btn-outline-primary mt-2 rounded-pill">View All Photos</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="changeImage(-1)">‹</button>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <button class="lightbox-nav lightbox-next" onclick="changeImage(1)">›</button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const images = [
+    {% for img in page_obj %}
+    { src: "{% if img.image %}{{ img.image.url }}{% else %}{% endif %}", title: "{{ img.title|escapejs }}" },
+    {% endfor %}
+];
+let current = 0;
+function openLightbox(idx) {
+    if (!images[idx].src) return;
+    current = idx;
+    document.getElementById('lightboxImg').src = images[idx].src;
+    document.getElementById('lightboxCaption').textContent = images[idx].title;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function closeLightboxOnBg(e) { if (e.target === document.getElementById('lightbox')) closeLightbox(); }
+function changeImage(dir) {
+    current = (current + dir + images.length) % images.length;
+    openLightbox(current);
+}
+document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').classList.contains('open')) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') changeImage(1);
+        if (e.key === 'ArrowLeft') changeImage(-1);
+    }
+});
+</script>
+{% endblock %}

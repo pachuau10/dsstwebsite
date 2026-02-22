@@ -1,0 +1,142 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Notice Board – DSST{% endblock %}
+{% block og_title %}Notice Board – DSST{% endblock %}
+{% block og_description %}Latest exam notices, results, events, holidays and announcements from DSST.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .filter-chip { display:inline-block; padding:6px 18px; border-radius:20px; font-size:0.85rem; font-weight:500; cursor:pointer; text-decoration:none; transition:all 0.3s; border:2px solid transparent; }
+    .filter-chip:hover { transform:translateY(-2px); }
+    .filter-chip.active { border-color: currentColor; }
+    .type-all { color:#6c757d; background:#f0f0f0; }
+    .type-all.active, .type-all:hover { background:#6c757d; color:white; }
+    .type-exam { color:#dc3545; background:#fff0f0; }
+    .type-exam.active, .type-exam:hover { background:#dc3545; color:white; }
+    .type-result { color:#28a745; background:#f0fff4; }
+    .type-result.active, .type-result:hover { background:#28a745; color:white; }
+    .type-information { color:#17a2b8; background:#f0fcff; }
+    .type-information.active, .type-information:hover { background:#17a2b8; color:white; }
+    .type-event { color:#007bff; background:#f0f4ff; }
+    .type-event.active, .type-event:hover { background:#007bff; color:white; }
+    .type-holiday { color:#cc8800; background:#fffbf0; }
+    .type-holiday.active, .type-holiday:hover { background:#ffc107; color:#000; }
+    .type-admission { color:#6c757d; background:#f8f8f8; }
+    .type-admission.active, .type-admission:hover { background:#6c757d; color:white; }
+
+    .notice-item { transition: all 0.3s; }
+    .notice-item:hover { transform:translateX(5px); }
+    .notice-row { border-left: 4px solid #ddd; padding: 20px 20px 20px 24px; background:white; border-radius:0 12px 12px 0; margin-bottom:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); cursor:pointer; }
+    .notice-row:hover { box-shadow:0 5px 25px rgba(0,0,0,0.1); }
+    .notice-row.type-exam { border-color:#dc3545; }
+    .notice-row.type-result { border-color:#28a745; }
+    .notice-row.type-information { border-color:#17a2b8; }
+    .notice-row.type-event { border-color:#007bff; }
+    .notice-row.type-holiday { border-color:#ffc107; }
+    .notice-row.type-admission { border-color:#6c757d; }
+    .notice-row.pinned { border-color:#e8a020; background:linear-gradient(to right,#fffbf0,white); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);">
+                <li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li>
+                <li class="breadcrumb-item active text-white">Notice Board</li>
+            </ol>
+        </nav>
+        <h1 class="fw-700 mb-1" style="font-family:'Playfair Display',serif;">📋 Notice Board</h1>
+        <p style="color:rgba(255,255,255,0.8);">Stay updated with exam schedules, results, events, and school announcements.</p>
+    </div>
+</div>
+
+<section style="padding:50px 0;">
+    <div class="container">
+        <!-- Search + Filter -->
+        <div class="card mb-4" style="border-radius:16px;">
+            <div class="card-body p-4">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="search" value="{{ search }}" class="form-control border-start-0 ps-0" placeholder="Search notices...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="type" class="form-select" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            {% for val, label in post_types %}
+                            <option value="{{ val }}" {% if selected_type == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="mb-4 d-flex flex-wrap gap-2">
+            <a href="/notices/" class="filter-chip type-all {% if not selected_type %}active{% endif %}">All</a>
+            {% for val, label in post_types %}
+            <a href="/notices/?type={{ val }}{% if search %}&search={{ search }}{% endif %}" class="filter-chip type-{{ val }} {% if selected_type == val %}active{% endif %}">{{ label }}</a>
+            {% endfor %}
+        </div>
+
+        <!-- Notices -->
+        {% if page_obj %}
+        <div class="mb-3 text-muted" style="font-size:0.9rem;">Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} notices</div>
+        {% for post in page_obj %}
+        <div class="notice-item">
+            <div class="notice-row type-{{ post.post_type }} {% if post.is_pinned %}pinned{% endif %}" onclick="location.href='/notices/{{ post.pk }}/'">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge badge-{{ post.post_type }}" style="font-size:0.72rem;">{{ post.get_post_type_display }}</span>
+                            {% if post.is_pinned %}<span class="badge bg-warning text-dark" style="font-size:0.72rem;"><i class="fas fa-thumbtack"></i> Pinned</span>{% endif %}
+                        </div>
+                        <h5 class="mb-1 fw-600">{{ post.title }}</h5>
+                        <p class="text-muted mb-0" style="font-size:0.88rem;">{{ post.summary|default:post.content|truncatechars:180 }}</p>
+                    </div>
+                    <div class="text-end ms-4 flex-shrink-0">
+                        <div style="font-size:0.8rem; color:#999;"><i class="fas fa-calendar me-1"></i>{{ post.created_at|date:"d M Y" }}</div>
+                        <div style="font-size:0.8rem; color:#999;" class="mt-1"><i class="fas fa-user me-1"></i>{{ post.author.get_full_name|default:post.author.username }}</div>
+                        <i class="fas fa-chevron-right text-muted mt-2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if search %}&search={{ search }}{% endif %}">‹ Prev</a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if num == page_obj.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a></li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_type %}&type={{ selected_type }}{% endif %}{% if search %}&search={{ search }}{% endif %}">Next ›</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No notices found</h4>
+            <p class="text-muted">Try a different search term or category.</p>
+            <a href="/notices/" class="btn btn-primary rounded-pill">Clear Filters</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

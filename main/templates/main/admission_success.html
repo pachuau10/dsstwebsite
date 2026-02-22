@@ -1,0 +1,67 @@
+{% extends 'main/base.html' %}
+{% block title %}Application Submitted – DSST{% endblock %}
+{% block content %}
+<section class="section-py">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="card p-5 text-center" style="border-radius:20px;border-top:5px solid #28a745;">
+                    <div style="width:80px;height:80px;border-radius:50%;background:#e8f5e9;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2.5rem;">✅</div>
+                    <h3 style="color:#2e7d32;font-family:'Playfair Display',serif;" class="mb-2">Application Submitted!</h3>
+                    <p style="color:#666;margin-bottom:24px;">Thank you, <strong>{{ application.student_name }}</strong>! Your admission application has been received successfully.</p>
+
+                    <div style="background:#f8f9fc;border-radius:14px;padding:24px;text-align:left;margin-bottom:24px;">
+                        <div class="row g-3" style="font-size:0.9rem;">
+                            <div class="col-6">
+                                <div style="color:#aaa;font-size:0.78rem;">APPLICATION NUMBER</div>
+                                <div style="font-weight:700;font-size:1.1rem;color:var(--primary);">{{ application.application_number }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div style="color:#aaa;font-size:0.78rem;">STATUS</div>
+                                <div><span class="badge bg-warning text-dark">Pending Review</span></div>
+                            </div>
+                            <div class="col-6">
+                                <div style="color:#aaa;font-size:0.78rem;">STUDENT NAME</div>
+                                <div style="font-weight:600;">{{ application.student_name }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div style="color:#aaa;font-size:0.78rem;">APPLYING FOR</div>
+                                <div style="font-weight:600;">Class {{ application.applying_for_class }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div style="color:#aaa;font-size:0.78rem;">SUBMITTED ON</div>
+                                <div style="font-weight:600;">{{ application.applied_at|date:"d M Y, h:i A" }}</div>
+                            </div>
+                            <div class="col-6">
+                                <div style="color:#aaa;font-size:0.78rem;">CONTACT EMAIL</div>
+                                <div style="font-weight:600;">{{ application.email }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background:#e8f4fd;border-radius:12px;padding:16px;text-align:left;margin-bottom:24px;">
+                        <div style="font-weight:700;color:var(--primary);margin-bottom:8px;"><i class="fas fa-info-circle me-1"></i>What's Next?</div>
+                        <ol style="font-size:0.85rem;color:#555;line-height:2;padding-left:20px;margin:0;">
+                            <li>Our admissions team will review your application within 2–3 working days.</li>
+                            <li>You will receive an email confirmation at <strong>{{ application.email }}</strong>.</li>
+                            <li>Shortlisted students will be called for an admission test on <strong>Dec 10–12, 2024</strong>.</li>
+                            <li>Bring all original documents + photocopies on test day.</li>
+                            <li>Results will be announced on <strong>December 20, 2024</strong>.</li>
+                        </ol>
+                    </div>
+
+                    <div style="background:#fff3cd;border-radius:12px;padding:14px;text-align:left;margin-bottom:28px;font-size:0.85rem;">
+                        <i class="fas fa-exclamation-triangle me-1 text-warning"></i>
+                        <strong>Save your Application Number: {{ application.application_number }}</strong> — you'll need it for all future communications.
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <button onclick="window.print()" class="btn btn-outline-primary rounded-pill px-4"><i class="fas fa-print me-2"></i>Print Application</button>
+                        <a href="/" class="btn btn-primary rounded-pill px-4"><i class="fas fa-home me-2"></i>Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

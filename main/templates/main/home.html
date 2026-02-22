@@ -1,0 +1,385 @@
+{% extends 'main/base.html' %}
+{% block title %}DSST – Excellence in Education{% endblock %}
+{% block og_title %}DSST – Excellence in Education Since 2004{% endblock %}
+{% block og_description %}DSST, Dawrpui, Aizawl – Nurturing young minds with quality education, values, and leadership skills for a brighter tomorrow.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero { background: linear-gradient(135deg, #1a3a6e 0%, #1565c0 55%, #0d47a1 100%); min-height: 88vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero::before { content:''; position:absolute; top:-100px; right:-100px; width:500px; height:500px; background:rgba(255,255,255,0.03); border-radius:50%; pointer-events:none; }
+    .hero::after { content:''; position:absolute; bottom:-150px; left:-80px; width:400px; height:400px; background:rgba(255,255,255,0.025); border-radius:50%; pointer-events:none; }
+    .hero-content { position:relative; z-index:2; color:white; padding:60px 0; }
+    .hero-badge { background:rgba(232,160,32,0.2); border:1px solid rgba(232,160,32,0.5); color:#f5c842; display:inline-block; padding:5px 16px; border-radius:20px; font-size:0.82rem; font-weight:500; margin-bottom:18px; }
+    .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); line-height:1.2; margin-bottom:18px; }
+    .hero h1 span { color:#f5c842; }
+    .stat-box { text-align:center; padding:12px; }
+    .stat-box .num { font-size:clamp(1.5rem,3vw,2.2rem); font-weight:700; color:#f5c842; }
+    .stat-box .lbl { font-size:0.75rem; color:rgba(255,255,255,0.65); margin-top:2px; }
+    .hero-info-card { background:white; border-radius:18px; padding:28px; position:relative; z-index:2; }
+    .info-box { border-radius:10px; padding:14px; margin-bottom:10px; }
+    .floating { animation:floatAnim 3s ease-in-out infinite; }
+    @keyframes floatAnim { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @media(max-width:767px) { .hero { min-height:auto; } .hero-content { padding:50px 0 30px; } }
+    .marquee-bar { background:var(--secondary); color:white; padding:10px 0; overflow:hidden; white-space:nowrap; }
+    .marquee-inner { display:inline-flex; animation:marquee 30s linear infinite; }
+    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .marquee-inner span { margin-right:55px; font-size:0.88rem; }
+    .qlink { border-radius:14px; padding:20px 14px; text-align:center; text-decoration:none; color:inherit; display:block; transition:all 0.3s; box-shadow:0 4px 15px rgba(0,0,0,0.06); background:white; }
+    .qlink:hover { transform:translateY(-5px); }
+    .qlink .icon { width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:1.4rem; }
+    .qlink span { font-size:0.85rem; font-weight:600; color:#333; }
+    .notice-card { border-left:4px solid #ddd; cursor:pointer; }
+    .notice-card.type-exam { border-color:#dc3545; }
+    .notice-card.type-result { border-color:#28a745; }
+    .notice-card.type-information { border-color:#17a2b8; }
+    .notice-card.type-event { border-color:#007bff; }
+    .notice-card.type-holiday { border-color:#ffc107; }
+    .teacher-mini { border-radius:14px; text-align:center; padding:24px 16px; transition:all 0.3s; }
+    .teacher-mini:hover { transform:translateY(-5px); }
+    .t-avatar { width:80px; height:80px; border-radius:50%; margin:0 auto 12px; background:linear-gradient(135deg,var(--primary),#2563eb); display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; overflow:hidden; }
+    .t-avatar img { width:100%; height:100%; object-fit:cover; }
+    .gal-thumb { border-radius:10px; overflow:hidden; aspect-ratio:1; cursor:pointer; }
+    .gal-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s; }
+    .gal-thumb:hover img { transform:scale(1.1); }
+    .gal-thumb .placeholder { width:100%; height:100%; background:linear-gradient(135deg,#e8f4fd,#d0e8ff); display:flex; align-items:center; justify-content:center; color:#1a3a6e; font-size:2rem; }
+    .ach-mini { border-radius:12px; padding:18px; display:flex; gap:14px; align-items:start; transition:all 0.3s; }
+    .ach-mini:hover { transform:translateX(4px); }
+    .ach-icon { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+
+    /* ── MOBILE FIXES ───────────────────────────────────── */
+    @media (max-width: 576px) {
+        /* Hero */
+        .hero-content { padding: 35px 0 25px; }
+        .hero h1 { font-size: 1.55rem; }
+        .hero p { font-size: 0.86rem !important; }
+        .hero .btn-lg { padding: 9px 16px !important; font-size: 0.85rem; }
+        .hero .d-flex.gap-3 { gap: 8px !important; }
+        .hero .container { padding-left: 20px !important; padding-right: 20px !important; }
+
+
+        /* Stats */
+        .stat-box { padding: 6px 3px; }
+        .stat-box .num { font-size: 1.25rem; }
+        .stat-box .lbl { font-size: 0.6rem; }
+
+        /* Marquee */
+        .marquee-inner span { font-size: 0.76rem; margin-right: 30px; }
+
+        /* Quick links */
+        .qlink { padding: 11px 6px; border-radius: 10px; }
+        .qlink .icon { width: 40px; height: 40px; font-size: 1rem; margin-bottom: 7px; }
+        .qlink span { font-size: 0.7rem; }
+
+        /* Section spacing */
+        .section-py { padding: 40px 0; }
+
+        /* Notice cards */
+        .notice-card { padding: 10px 12px !important; }
+
+        /* Teacher cards */
+        .teacher-mini { padding: 14px 8px; }
+        .t-avatar { width: 58px; height: 58px; font-size: 1.4rem; }
+
+        /* Why choose us */
+        .card.h-100.p-4 { padding: 18px 14px !important; }
+
+        /* CTA section */
+        .cta-section { padding: 45px 0 !important; }
+        .cta-section h2 { font-size: 1.4rem !important; }
+        .cta-section .btn-lg { padding: 9px 16px !important; font-size: 0.85rem; }
+        .cta-section .d-flex { gap: 10px !important; }
+
+        /* Gallery */
+        .gal-thumb { border-radius: 8px; }
+
+        /* Achievements */
+        .ach-mini { padding: 12px; gap: 10px; }
+        .ach-icon { width: 38px; height: 38px; font-size: 1.1rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7 mt-0 hero-content">
+                <h1><span>Dawrpui School of Science & Technology</span></h1>
+                <p style="font-size:1rem;color:rgba(255,255,255,0.82);max-width:500px;line-height:1.8;">DSST offers world-class education from Nursery to Class XII, blending academics, sports, arts, and values.</p>
+                <div class="d-flex gap-3 flex-wrap mt-4">
+                    <a href="/about/" class="btn btn-warning btn-lg px-4 rounded-pill fw-bold">Explore School</a>
+                    <a href="/admission/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Apply Now</a>
+                </div>
+                <div class="row g-2 mt-3">
+                    <div class="col-3 stat-box"><div class="num">2500+</div><div class="lbl">Students</div></div>
+                    <div class="col-3 stat-box"><div class="num">120+</div><div class="lbl">Teachers</div></div>
+                    <div class="col-3 stat-box"><div class="num">98%</div><div class="lbl">Pass Rate</div></div>
+                    <div class="col-3 stat-box"><div class="num">39</div><div class="lbl">Years</div></div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="hero-info-card floating">
+                    <div class="row g-2">
+                        <div class="col-6"><div class="info-box" style="background:#e8f4fd;"><div style="font-size:1.5rem;margin-bottom:6px;">📚</div><div style="font-weight:700;color:#1a3a6e;font-size:0.92rem;">Academic Excellence</div><div style="font-size:0.78rem;color:#888;">Top-ranked curriculum</div></div></div>
+                        <div class="col-6"><div class="info-box" style="background:#fff3e0;"><div style="font-size:1.5rem;margin-bottom:6px;">🏆</div><div style="font-weight:700;color:#e8a020;font-size:0.92rem;">Sports & Arts</div><div style="font-size:0.78rem;color:#888;">50+ activities</div></div></div>
+                        <div class="col-6"><div class="info-box" style="background:#e8f5e9;"><div style="font-size:1.5rem;margin-bottom:6px;">🔬</div><div style="font-weight:700;color:#2e7d32;font-size:0.92rem;">Modern Labs</div><div style="font-size:0.78rem;color:#888;">10+ Laboratories</div></div></div>
+                        <div class="col-6"><div class="info-box" style="background:#fce4ec;"><div style="font-size:1.5rem;margin-bottom:6px;">🛡️</div><div style="font-weight:700;color:#c2185b;font-size:0.92rem;">Safe Campus</div><div style="font-size:0.78rem;color:#888;">24/7 CCTV Security</div></div></div>
+                    </div>
+                    <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
+                        <div style="font-size:0.83rem;color:#666;"><i class="fas fa-circle text-success me-1" style="font-size:0.6rem;"></i>Admissions Open 2026–27</div>
+                        <a href="/admission/" class="btn btn-sm btn-primary rounded-pill px-3">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+    <div class="marquee-inner">
+        <span>📢 Admissions Open for 2026–25 Session – Apply Online Now</span>
+        <span>📝 Annual Examination Schedule Released – Check Notice Board</span>
+        <span>🏆 Students won National Science Olympiad 2026</span>
+        <span>🎉 Sports Day on December 15, 2026 – Parents Invited</span>
+        <span>📚 Mid-Term Results Announced – Visit Notice Board</span>
+        <span>🔬 New Chemistry Lab Inaugurated</span>
+        <span>📢 Admissions Open for 2026–27 Session – Apply Online Now</span>
+        <span>📝 Annual Examination Schedule Released – Check Notice Board</span>
+        <span>🏆 Students won National Science Olympiad 2024</span>
+        <span>🎉 Sports Day on December 15, 2024 – Parents Invited</span>
+        <span>📚 Mid-Term Results Announced – Visit Notice Board</span>
+        <span>🔬 New Chemistry Lab Inaugurated</span>
+    </div>
+</div>
+
+<!-- QUICK LINKS -->
+<section class="section-py bg-light-custom">
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-4 col-sm-4 col-md-2"><a href="/notices/?type=exam" class="qlink"><div class="icon" style="background:#ffebee;color:#c62828;"><i class="fas fa-file-alt"></i></div><span>Exam Notices</span></a></div>
+            <div class="col-4 col-sm-4 col-md-2"><a href="/notices/?type=result" class="qlink"><div class="icon" style="background:#e8f5e9;color:#2e7d32;"><i class="fas fa-chart-bar"></i></div><span>Results</span></a></div>
+            <div class="col-4 col-sm-4 col-md-2"><a href="/fee-payment/" class="qlink"><div class="icon" style="background:#e3f2fd;color:#1565c0;"><i class="fas fa-credit-card"></i></div><span>Pay Fees</span></a></div>
+            <div class="col-4 col-sm-4 col-md-2"><a href="/admission/" class="qlink"><div class="icon" style="background:#fff3e0;color:#e65100;"><i class="fas fa-user-graduate"></i></div><span>Admission</span></a></div>
+            <div class="col-4 col-sm-4 col-md-2"><a href="/teachers/" class="qlink"><div class="icon" style="background:#f3e5f5;color:#7b1fa2;"><i class="fas fa-chalkboard-teacher"></i></div><span>Teachers</span></a></div>
+            <div class="col-4 col-sm-4 col-md-2"><a href="/gallery/" class="qlink"><div class="icon" style="background:#e8f5e9;color:#2e7d32;"><i class="fas fa-images"></i></div><span>Gallery</span></a></div>
+        </div>
+    </div>
+</section>
+
+<!-- NOTICES -->
+<section class="section-py">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="section-title mb-0">📋 Latest Notices</h2>
+            <a href="/notices/" class="btn btn-outline-primary btn-sm rounded-pill">View All Notices</a>
+        </div>
+        <div class="row g-3">
+            <div class="col-lg-8">
+                {% for post in latest_posts %}
+                <div class="card notice-card type-{{ post.post_type }} p-3 mb-3" onclick="location.href='/notices/{{ post.pk }}/';">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div class="flex-grow-1">
+                            <div class="mb-1"><span class="badge badge-{{ post.post_type }}" style="font-size:0.7rem;">{{ post.get_post_type_display }}</span>{% if post.is_pinned %}<span class="badge bg-warning text-dark ms-1" style="font-size:0.7rem;"><i class="fas fa-thumbtack"></i></span>{% endif %}</div>
+                            <div style="font-weight:600;font-size:0.9rem;color:#1c1c2e;line-height:1.4;">{{ post.title }}</div>
+                            <div style="font-size:0.78rem;color:#999;margin-top:4px;">{{ post.created_at|date:"d M Y" }}</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted mt-1 flex-shrink-0"></i>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4 text-muted"><i class="fas fa-newspaper fa-2x mb-2 d-block"></i>No notices yet.</div>
+                {% endfor %}
+            </div>
+            <div class="col-lg-4">
+                <div class="card p-4 h-100" style="background:linear-gradient(135deg,var(--primary),#1565c0);color:white;border-radius:16px;">
+                    <h5 class="fw-bold mb-3">🎓 Exam Corner</h5>
+                    {% for post in exam_notices %}
+                    <a href="/notices/{{ post.pk }}/" style="text-decoration:none;">
+                        <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:10px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                            <div style="font-size:0.85rem;font-weight:600;color:white;">{{ post.title }}</div>
+                            <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);">{{ post.created_at|date:"d M Y" }}</div>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <p style="color:rgba(255,255,255,0.7);font-size:0.85rem;">No exam notices currently.</p>
+                    {% endfor %}
+                    <a href="/notices/?type=exam" class="btn btn-warning btn-sm rounded-pill mt-2 w-100">All Exam Notices</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TEACHERS PREVIEW -->
+{% if featured_teachers %}
+<section class="section-py bg-light-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="section-title mb-0">👩‍🏫 Meet Our Teachers</h2>
+            <a href="/teachers/" class="btn btn-outline-primary btn-sm rounded-pill">View All Faculty</a>
+        </div>
+        <div class="row g-4">
+            {% for t in featured_teachers %}
+            <div class="col-6 col-md-3">
+                <div class="card teacher-mini" onclick="location.href='/teachers/{{ t.pk }}/'" style="cursor:pointer;">
+                    <div class="t-avatar">{% if t.photo %}<img src="{{ t.photo.url }}" alt="{{ t.name }}">{% else %}<i class="fas fa-user"></i>{% endif %}</div>
+                    <div style="font-weight:700;font-size:0.88rem;color:var(--primary);margin-bottom:3px;">{{ t.name }}</div>
+                    <div style="font-size:0.75rem;color:#888;">{{ t.get_designation_display }}</div>
+                    {% if t.department %}<div style="font-size:0.72rem;color:var(--secondary);font-weight:600;margin-top:4px;">{{ t.department.name }}</div>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- LABS PREVIEW -->
+<section class="section-py">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="section-title mb-0">🔬 Our Facilities</h2>
+            <a href="/labs/" class="btn btn-outline-primary btn-sm rounded-pill">Explore All Labs</a>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 text-center p-3" style="border-radius:14px;">
+                    <div style="width:55px;height:55px;border-radius:14px;background:#e3f2fd;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#1565c0;"><i class="fas fa-laptop"></i></div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Computer Lab</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 text-center p-3" style="border-radius:14px;">
+                    <div style="width:55px;height:55px;border-radius:14px;background:#ffebee;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#c62828;"><i class="fas fa-flask"></i></div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Science Lab</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 text-center p-3" style="border-radius:14px;">
+                    <div style="width:55px;height:55px;border-radius:14px;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#e65100;"><i class="fas fa-book"></i></div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Library</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 text-center p-3" style="border-radius:14px;">
+                    <div style="width:55px;height:55px;border-radius:14px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#2e7d32;"><i class="fas fa-running"></i></div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Sports Ground</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 text-center p-3" style="border-radius:14px;">
+                    <div style="width:55px;height:55px;border-radius:14px;background:#f3e5f5;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#7b1fa2;"><i class="fas fa-palette"></i></div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Art Studio</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100 text-center p-3" style="border-radius:14px;">
+                    <div style="width:55px;height:55px;border-radius:14px;background:#e8eaf6;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#1a237e;"><i class="fas fa-music"></i></div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Music Room</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY PREVIEW -->
+{% if featured_gallery %}
+<section class="section-py bg-light-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="section-title mb-0">📸 Photo Gallery</h2>
+            <a href="/gallery/" class="btn btn-outline-primary btn-sm rounded-pill">View Full Gallery</a>
+        </div>
+        <div class="row g-2">
+            {% for img in featured_gallery %}
+            <div class="col-6 col-sm-4 col-md-3">
+                <a href="/gallery/" class="gal-thumb d-block">
+                    {% if img.image %}<img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">{% else %}<div class="placeholder"><i class="fas fa-image"></i></div>{% endif %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ACHIEVEMENTS PREVIEW -->
+{% if featured_achievements %}
+<section class="section-py">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="section-title mb-0">🏅 Recent Achievements</h2>
+            <a href="/achievements/" class="btn btn-outline-primary btn-sm rounded-pill">All Achievements</a>
+        </div>
+        <div class="row g-3">
+            {% for ach in featured_achievements %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card ach-mini p-3" style="border-radius:12px;">
+                    <div class="ach-icon" style="background:{% if ach.level == 'national' or ach.level == 'international' %}#fff3e0{% elif ach.level == 'state' %}#e3f2fd{% else %}#e8f5e9{% endif %};">
+                        {% if ach.category == 'sports' %}🏅{% elif ach.category == 'academic' %}📚{% elif ach.category == 'arts' %}🎭{% elif ach.category == 'science' %}🔬{% else %}🏆{% endif %}
+                    </div>
+                    <div>
+                        <div style="font-weight:700;font-size:0.88rem;color:var(--primary);">{{ ach.title }}</div>
+                        <div style="font-size:0.78rem;color:#888;margin-top:3px;">{{ ach.get_level_display }} · {{ ach.year }}</div>
+                        {% if ach.winner_name %}<div style="font-size:0.78rem;color:#555;margin-top:3px;"><i class="fas fa-user me-1"></i>{{ ach.winner_name }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- WHY CHOOSE US -->
+<section class="section-py bg-light-custom">
+    <div class="container">
+        <div class="text-center mb-5"><h2 class="section-title">Why Choose DSST
+            ?</h2></div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center" style="border-radius:16px;">
+                    <div style="width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 15px;background:#e8f4fd;color:#1a3a6e;"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h5 style="font-size:0.95rem;font-weight:700;color:var(--primary);">Expert Faculty</h5>
+                    <p style="font-size:0.84rem;color:#666;line-height:1.7;">Highly qualified, experienced teachers dedicated to every student's growth.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center" style="border-radius:16px;">
+                    <div style="width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 15px;background:#fff3e0;color:#e8a020;"><i class="fas fa-building"></i></div>
+                    <h5 style="font-size:0.95rem;font-weight:700;color:var(--primary);">Modern Infrastructure</h5>
+                    <p style="font-size:0.84rem;color:#666;line-height:1.7;">Smart classrooms, labs, library, and sports facilities for the best learning.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center" style="border-radius:16px;">
+                    <div style="width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 15px;background:#e8f5e9;color:#2e7d32;"><i class="fas fa-heart"></i></div>
+                    <h5 style="font-size:0.95rem;font-weight:700;color:var(--primary);">Holistic Development</h5>
+                    <p style="font-size:0.84rem;color:#666;line-height:1.7;">Balanced focus on academics, arts, sports, and life values.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 p-4 text-center" style="border-radius:16px;">
+                    <div style="width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 15px;background:#fce4ec;color:#c2185b;"><i class="fas fa-shield-alt"></i></div>
+                    <h5 style="font-size:0.95rem;font-weight:700;color:var(--primary);">Safe Environment</h5>
+                    <p style="font-size:0.84rem;color:#666;line-height:1.7;">24/7 CCTV, trained staff, GPS buses, and a fully secure campus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" style="background:linear-gradient(135deg,#1a3a6e,#1565c0);padding:70px 0;color:white;text-align:center;">
+    <div class="container">
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.5rem);margin-bottom:12px;">Ready to Join DSST?</h2>
+        <p style="color:rgba(255,255,255,0.8);max-width:480px;margin:0 auto 28px;font-size:1rem;">Admissions open for 2024–25. Fill out the online form and take the first step today.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/admission/" class="btn btn-warning btn-lg px-4 rounded-pill fw-bold"><i class="fas fa-user-graduate me-2"></i>Apply for Admission</a>
+            <a href="/contact/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Contact Us</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

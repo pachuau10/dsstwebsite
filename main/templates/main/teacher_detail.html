@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+{% block title %}{{ teacher.name }} – DSST{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item"><a href="/teachers/" style="color:rgba(255,255,255,0.7);">Teachers</a></li><li class="breadcrumb-item active text-white">{{ teacher.name }}</li></ol></nav>
+    </div>
+</div>
+<section class="section-py bg-light-custom">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card p-4 text-center">
+                    {% if teacher.photo %}
+                    <img src="{{ teacher.photo.url }}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid #e8f4fd;margin:0 auto 15px;" alt="{{ teacher.name }}">
+                    {% else %}
+                    <div style="width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#2563eb);display:flex;align-items:center;justify-content:center;font-size:3.5rem;color:white;margin:0 auto 15px;"><i class="fas fa-user-tie"></i></div>
+                    {% endif %}
+                    <h4 class="fw-700" style="color:var(--primary);">{{ teacher.name }}</h4>
+                    <div class="badge bg-primary mb-2">{{ teacher.get_designation_display }}</div>
+                    {% if teacher.department %}<div style="color:#888;font-size:0.88rem;">{{ teacher.department.name }}</div>{% endif %}
+                    {% if teacher.email %}<a href="mailto:{{ teacher.email }}" class="btn btn-outline-primary btn-sm rounded-pill mt-3 w-100"><i class="fas fa-envelope me-2"></i>{{ teacher.email }}</a>{% endif %}
+                </div>
+                <div class="card p-4 mt-3">
+                    <h6 class="fw-700 mb-3" style="color:var(--primary);">Quick Info</h6>
+                    {% if teacher.qualification %}<div class="d-flex gap-2 mb-2"><i class="fas fa-graduation-cap text-primary mt-1"></i><div><div style="font-size:0.78rem;color:#aaa;">Qualification</div><div style="font-size:0.88rem;font-weight:600;">{{ teacher.qualification }}</div></div></div>{% endif %}
+                    <div class="d-flex gap-2 mb-2"><i class="fas fa-briefcase text-success mt-1"></i><div><div style="font-size:0.78rem;color:#aaa;">Experience</div><div style="font-size:0.88rem;font-weight:600;">{{ teacher.experience_years }} Years</div></div></div>
+                    {% if teacher.department %}<div class="d-flex gap-2 mb-2"><i class="fas fa-sitemap text-info mt-1"></i><div><div style="font-size:0.78rem;color:#aaa;">Department</div><div style="font-size:0.88rem;font-weight:600;">{{ teacher.department.name }}</div></div></div>{% endif %}
+                    {% if teacher.joined_date %}<div class="d-flex gap-2 mb-2"><i class="fas fa-calendar text-warning mt-1"></i><div><div style="font-size:0.78rem;color:#aaa;">Joined</div><div style="font-size:0.88rem;font-weight:600;">{{ teacher.joined_date|date:"F Y" }}</div></div></div>{% endif %}
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card p-4 mb-3">
+                    {% if teacher.bio %}<h5 class="fw-700 mb-3" style="color:var(--primary);">About</h5><p style="line-height:1.9;color:#555;">{{ teacher.bio }}</p>{% endif %}
+                    {% if teacher.subjects %}
+                    <h6 class="fw-700 mt-3 mb-2">Subjects Taught</h6>
+                    <div>{% for s in teacher.get_subjects_list %}<span style="background:#e8f4fd;color:#1a3a6e;padding:5px 14px;border-radius:20px;font-size:0.82rem;font-weight:600;display:inline-block;margin:3px;">{{ s }}</span>{% endfor %}</div>
+                    {% endif %}
+                    {% if teacher.achievements %}
+                    <h6 class="fw-700 mt-4 mb-2">Achievements & Awards</h6>
+                    <div style="color:#555;line-height:1.9;">{{ teacher.achievements|linebreaks }}</div>
+                    {% endif %}
+                </div>
+                {% if teacher.labs_incharge.all %}
+                <div class="card p-4">
+                    <h6 class="fw-700 mb-3" style="color:var(--primary);">Labs In-charge</h6>
+                    {% for lab in teacher.labs_incharge.all %}
+                    <a href="/labs/" style="text-decoration:none;"><div class="d-flex gap-3 align-items-center p-2 rounded mb-2" style="background:#f8f9fc;"><div style="width:40px;height:40px;border-radius:10px;background:#e8f4fd;display:flex;align-items:center;justify-content:center;color:var(--primary);"><i class="fas fa-flask"></i></div><div><div style="font-weight:600;font-size:0.9rem;">{{ lab.name }}</div><div style="font-size:0.78rem;color:#888;">{{ lab.get_lab_type_display }}</div></div></div></a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <a href="/teachers/" class="btn btn-outline-primary rounded-pill mt-3"><i class="fas fa-arrow-left me-2"></i>Back to Teachers</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

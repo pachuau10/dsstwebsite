@@ -1,0 +1,90 @@
+{% extends 'main/base.html' %}
+{% block title %}Contact Us – DSST{% endblock %}
+{% block og_title %}Contact Us – DSST{% endblock %}
+{% block og_description %}Get in touch with DSST. Located at Dawrpui, Aizawl, Mizoram. Call +91 93626 03236.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item active text-white">Contact</li></ol></nav>
+        <h1 style="font-family:'Playfair Display',serif;" class="mb-1">📬 Contact Us</h1>
+        <p style="color:rgba(255,255,255,0.8);">We'd love to hear from you. Reach out for admissions, queries, or feedback.</p>
+    </div>
+</div>
+
+<section style="padding:70px 0; background:#f8f9fc;">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-4">
+                <div class="card p-4 mb-4" style="border-radius:16px;">
+                    <div style="width:50px;height:50px;background:#e8f4fd;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#1a3a6e;margin-bottom:15px;"><i class="fas fa-map-marker-alt"></i></div>
+                    <h5 class="fw-700">Address</h5>
+                    <p style="color:#666;margin:0;">Dawrpui,Aizawl<br>Mizoram, India</p>
+                </div>
+                <div class="card p-4 mb-4" style="border-radius:16px;">
+                    <div style="width:50px;height:50px;background:#fff3e0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#e8a020;margin-bottom:15px;"><i class="fas fa-phone-alt"></i></div>
+                    <h5 class="fw-700">Phone</h5>
+                    <p style="color:#666;margin:0;">Main: +91 98765 43210<br>Admissions: +91 98765 43211<br>Accounts: +91 98765 43212</p>
+                </div>
+                <div class="card p-4 mb-4" style="border-radius:16px;">
+                    <div style="width:50px;height:50px;background:#e8f5e9;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#2e7d32;margin-bottom:15px;"><i class="fas fa-envelope"></i></div>
+                    <h5 class="fw-700">Email</h5>
+                    <p style="color:#666;margin:0;">info@dsst.edu<br>admissions@dsst.edu</p>
+                </div>
+                <div class="card p-4" style="border-radius:16px;">
+                    <div style="width:50px;height:50px;background:#fce4ec;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#c2185b;margin-bottom:15px;"><i class="fas fa-clock"></i></div>
+                    <h5 class="fw-700">Office Hours</h5>
+                    <p style="color:#666;margin:0;">Monday – Friday: 8 AM – 4 PM<br>Saturday: 8 AM – 1 PM<br>Sunday: Closed</p>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card p-5" style="border-radius:20px;">
+                    <h3 style="font-family:'Playfair Display',serif;color:#1a3a6e;" class="mb-4">Send Us a Message</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" name="name" class="form-control" id="name" placeholder=" " required>
+                                    <label>Your Full Name *</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" name="email" class="form-control" id="email" placeholder=" " required>
+                                    <label>Email Address *</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" name="subject" class="form-control" id="subject" placeholder=" " required>
+                                    <label>Subject *</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea name="message" class="form-control" id="message" placeholder=" " style="height:150px" required></textarea>
+                                    <label>Your Message *</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Map placeholder -->
+                <div class="card mt-4" style="border-radius:16px;overflow:hidden;height:250px;background:linear-gradient(135deg,#e8f4fd,#f0f4ff);display:flex;align-items:center;justify-content:center;">
+                    <div class="text-center" style="color:#1a3a6e;">
+                        <i class="fas fa-map fa-3x mb-3"></i>
+                        <p>Map view – Dawrpui</p>
+                        <a href="https://maps.google.com" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill">Open in Google Maps</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Payment Receipt – DSST{% endblock %}
+
+{% block extra_css %}
+<style>
+    .receipt-container { max-width:700px; margin:40px auto; }
+    .receipt-card { border:2px solid #1a3a6e; border-radius:20px; overflow:hidden; }
+    .receipt-header { background:linear-gradient(135deg,#1a3a6e,#1565c0); color:white; text-align:center; padding:40px; }
+    .success-icon { width:80px; height:80px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin:0 auto 20px; }
+    .receipt-body { padding:40px; background:white; }
+    .receipt-row { display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px dashed #eee; }
+    .receipt-row:last-child { border:none; }
+    .receipt-row .label { color:#888; font-size:0.9rem; }
+    .receipt-row .value { font-weight:600; font-size:0.95rem; text-align:right; }
+    .receipt-footer { background:#f8f9fc; padding:25px 40px; text-align:center; border-top:2px dashed #ddd; }
+    .print-btn { background:#1a3a6e; color:white; border:none; padding:12px 30px; border-radius:25px; cursor:pointer; font-size:0.95rem; }
+    @media print {
+        nav, footer, .print-btn, .alert, .no-print { display:none !important; }
+        .receipt-container { margin:0; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="background:#f8f9fc; min-height:80vh; padding:40px 0;">
+    <div class="container">
+        <div class="receipt-container">
+            <div class="text-center mb-4 no-print">
+                <div class="alert alert-success d-inline-flex align-items-center gap-2">
+                    <i class="fas fa-check-circle fa-lg"></i>
+                    <strong>Payment Successful!</strong> Your transaction has been recorded.
+                </div>
+            </div>
+            <div class="receipt-card">
+                <div class="receipt-header">
+                    <div class="success-icon">✅</div>
+                    <h3 style="font-family:'Playfair Display',serif;">Payment Receipt</h3>
+                    <p style="color:rgba(255,255,255,0.8); margin:0;">DSST</p>
+                    <div style="margin-top:15px; font-size:0.9rem; color:rgba(255,255,255,0.7);">Transaction ID: <strong style="color:white; font-family:monospace;">{{ payment.transaction_id }}</strong></div>
+                </div>
+                <div class="receipt-body">
+                    <div class="receipt-row">
+                        <span class="label">Student Name</span>
+                        <span class="value">{{ payment.student_name }}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Student ID</span>
+                        <span class="value">{{ payment.student_id }}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Class & Section</span>
+                        <span class="value">{{ payment.class_name }}{% if payment.section %} – {{ payment.section }}{% endif %}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Fee Type</span>
+                        <span class="value">{{ payment.get_fee_type_display }}</span>
+                    </div>
+                    {% if payment.month %}
+                    <div class="receipt-row">
+                        <span class="label">Fee Month</span>
+                        <span class="value">{{ payment.month }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="receipt-row">
+                        <span class="label">Payment Method</span>
+                        <span class="value">{{ payment.payment_method|title }}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Payment Date</span>
+                        <span class="value">{{ payment.payment_date|date:"d F Y, h:i A" }}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Status</span>
+                        <span class="value"><span class="badge bg-success">{{ payment.get_status_display }}</span></span>
+                    </div>
+                    <div class="receipt-row" style="background:#f8f9fc; border-radius:10px; padding:16px; margin-top:10px;">
+                        <span class="label" style="font-size:1.1rem; font-weight:700; color:#1a3a6e;">Amount Paid</span>
+                        <span class="value" style="font-size:1.4rem; color:#e8a020;">₹{{ payment.amount }}</span>
+                    </div>
+                </div>
+                <div class="receipt-footer">
+                    <p style="color:#666; font-size:0.85rem; margin-bottom:20px;">
+                        A receipt has been sent to <strong>{{ payment.email }}</strong>. Please keep this for your records.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap no-print">
+                        <button class="print-btn" onclick="window.print()"><i class="fas fa-print me-2"></i>Print Receipt</button>
+                        <a href="/fee-payment/" class="btn btn-outline-primary rounded-pill px-4">Pay Another Fee</a>
+                        <a href="/" class="btn btn-outline-secondary rounded-pill px-4">Go to Home</a>
+                    </div>
+                    <div class="mt-3" style="font-size:0.8rem; color:#aaa;">
+                        DSST | 123 School Lane, Delhi – 110001 | +91 98765 43210
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

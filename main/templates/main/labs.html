@@ -1,0 +1,114 @@
+{% extends 'main/base.html' %}
+{% block title %}Labs & Facilities – DSST{% endblock %}
+{% block og_title %}Our Teachers – DSST{% endblock %}
+{% block og_description %}Meet our dedicated and experienced faculty at DSST, Aizawl, Mizoram.{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lab-card { border-radius: 16px; overflow: hidden; transition: all 0.3s; }
+    .lab-card:hover { transform: translateY(-5px); box-shadow: 0 18px 50px rgba(0,0,0,0.12) !important; }
+    .lab-icon-box { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+    .equipment-tag { background: #f0f4ff; color: #1a3a6e; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; font-weight: 500; display: inline-block; margin: 2px; }
+    .stat-pill { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; font-size: 0.82rem; }
+    .filter-btn { border: 2px solid #ddd; border-radius: 25px; padding: 6px 16px; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.25s; background: white; text-decoration: none; color: #555; display: inline-block; margin: 3px; }
+    .filter-btn:hover, .filter-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item active text-white">Labs & Facilities</li></ol></nav>
+        <h1 style="font-family:'Playfair Display',serif;" class="mb-1">🔬 Labs & Facilities</h1>
+        <p style="color:rgba(255,255,255,0.8);">State-of-the-art infrastructure to provide the best learning experience.</p>
+        <div class="d-flex gap-3 flex-wrap mt-3">
+            <div class="stat-pill"><i class="fas fa-flask me-1"></i>{{ labs|length }}+ Facilities</div>
+            <div class="stat-pill"><i class="fas fa-users me-1"></i>2500+ Students Served</div>
+            <div class="stat-pill"><i class="fas fa-star me-1"></i>CBSE Certified</div>
+        </div>
+    </div>
+</div>
+
+<section class="section-py">
+    <div class="container">
+        <!-- Filters -->
+        <div class="mb-5 text-center">
+            <a href="/labs/" class="filter-btn {% if not selected_type %}active{% endif %}">All Facilities</a>
+            {% for val, label in lab_types %}
+            <a href="/labs/?type={{ val }}" class="filter-btn {% if selected_type == val %}active{% endif %}">{{ label }}</a>
+            {% endfor %}
+        </div>
+
+        {% if labs %}
+        <div class="row g-4">
+            {% for lab in labs %}
+            {% with type=lab.lab_type %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card lab-card h-100">
+                    {% if lab.image %}
+                    <div style="height:180px;overflow:hidden;"><img src="{{ lab.image.url }}" style="width:100%;height:100%;object-fit:cover;" alt="{{ lab.name }}"></div>
+                    {% else %}
+                    <div style="height:160px;background:{% if type == 'computer' %}linear-gradient(135deg,#1565c0,#1a237e){% elif type == 'chemistry' or type == 'science' %}linear-gradient(135deg,#b71c1c,#c62828){% elif type == 'biology' %}linear-gradient(135deg,#1b5e20,#2e7d32){% elif type == 'physics' %}linear-gradient(135deg,#4a148c,#6a1b9a){% elif type == 'library' %}linear-gradient(135deg,#e65100,#ef6c00){% elif type == 'sports' %}linear-gradient(135deg,#006064,#00838f){% elif type == 'art' %}linear-gradient(135deg,#880e4f,#ad1457){% elif type == 'music' %}linear-gradient(135deg,#1a237e,#283593){% else %}linear-gradient(135deg,var(--primary),#2563eb){% endif %};display:flex;align-items:center;justify-content:center;flex-direction:column;color:white;">
+                        <i class="{% if type == 'computer' %}fas fa-laptop{% elif type == 'chemistry' %}fas fa-flask{% elif type == 'biology' %}fas fa-leaf{% elif type == 'physics' %}fas fa-atom{% elif type == 'library' %}fas fa-book{% elif type == 'sports' %}fas fa-running{% elif type == 'art' %}fas fa-palette{% elif type == 'music' %}fas fa-music{% elif type == 'language' %}fas fa-language{% elif type == 'math' %}fas fa-calculator{% else %}fas fa-building{% endif %} fa-3x mb-2"></i>
+                        <div style="font-size:0.85rem;opacity:0.85;">{{ lab.get_lab_type_display }}</div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="fw-700 mb-0" style="color:var(--primary);">{{ lab.name }}</h5>
+                            {% if lab.capacity %}<span class="badge bg-light text-dark" style="font-size:0.72rem;"><i class="fas fa-users me-1"></i>{{ lab.capacity }}</span>{% endif %}
+                        </div>
+                        <p style="font-size:0.86rem;color:#666;line-height:1.7;">{{ lab.description|truncatechars:160 }}</p>
+                        {% if lab.location %}<div style="font-size:0.8rem;color:#999;" class="mb-2"><i class="fas fa-map-marker-alt me-1"></i>{{ lab.location }}</div>{% endif %}
+                        {% if lab.get_equipment_list %}
+                        <div class="mt-3">
+                            <div style="font-size:0.78rem;font-weight:600;color:#888;margin-bottom:6px;">KEY EQUIPMENT</div>
+                            {% for item in lab.get_equipment_list|slice:":5" %}
+                            <span class="equipment-tag">{{ item }}</span>
+                            {% endfor %}
+                            {% if lab.get_equipment_list|length > 5 %}<span class="equipment-tag" style="background:#e8f5e9;color:#2e7d32;">+{{ lab.get_equipment_list|length|add:"-5" }} more</span>{% endif %}
+                        </div>
+                        {% endif %}
+                        {% if lab.incharge %}
+                        <div class="mt-3 pt-3 border-top d-flex align-items-center gap-2">
+                            <div style="width:30px;height:30px;border-radius:50%;background:#e8f4fd;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--primary);"><i class="fas fa-user"></i></div>
+                            <div><div style="font-size:0.72rem;color:#aaa;">In-charge</div><div style="font-size:0.82rem;font-weight:600;">{{ lab.incharge.name }}</div></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5"><i class="fas fa-flask fa-3x text-muted mb-3 d-block"></i><h5 class="text-muted">No facilities found</h5><a href="/labs/" class="btn btn-outline-primary mt-2 rounded-pill">View All</a></div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Infrastructure Stats Banner -->
+<!-- Infrastructure Stats Banner -->
+<section style="background:linear-gradient(135deg,var(--primary),#1565c0);padding:60px 0;color:white;">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3">
+                <div style="font-size:2rem;font-weight:700;color:#f5c842;">10+</div>
+                <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Laboratories</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div style="font-size:2rem;font-weight:700;color:#f5c842;">5000+</div>
+                <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Books</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div style="font-size:2rem;font-weight:700;color:#f5c842;">200+</div>
+                <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Computers</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div style="font-size:2rem;font-weight:700;color:#f5c842;">2</div>
+                <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Sports Grounds</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
