@@ -250,3 +250,23 @@ class AdmissionApplication(models.Model):
             import uuid
             self.application_number = 'GPS' + str(uuid.uuid4()).upper()[:8]
         super().save(*args, **kwargs)
+
+
+class MarqueeItem(models.Model):
+    text = models.CharField(max_length=300)
+    emoji = models.CharField(max_length=10, default='📢')
+    link_post = models.ForeignKey('Post', on_delete=models.SET_NULL, null=True, blank=True, help_text='Link to a notice post')
+    custom_url = models.CharField(max_length=200, blank=True, help_text='Custom URL e.g. /gallery/ (used if no post linked)')
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.emoji} {self.text}"
+
+    def get_url(self):
+        if self.link_post:
+            return f'/notices/{self.link_post.pk}/'
+        return self.custom_url or None

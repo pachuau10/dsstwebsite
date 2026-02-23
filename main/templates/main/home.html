@@ -137,20 +137,33 @@
 </section>
 
 <!-- MARQUEE -->
+<!-- MARQUEE -->
 <div class="marquee-bar">
     <div class="marquee-inner">
-        <span>📢 Admissions Open for 2026–25 Session – Apply Online Now</span>
-        <span>📝 Annual Examination Schedule Released – Check Notice Board</span>
-        <span>🏆 Students won National Science Olympiad 2026</span>
-        <span>🎉 Sports Day on December 15, 2026 – Parents Invited</span>
-        <span>📚 Mid-Term Results Announced – Visit Notice Board</span>
-        <span>🔬 New Chemistry Lab Inaugurated</span>
-        <span>📢 Admissions Open for 2026–27 Session – Apply Online Now</span>
-        <span>📝 Annual Examination Schedule Released – Check Notice Board</span>
-        <span>🏆 Students won National Science Olympiad 2024</span>
-        <span>🎉 Sports Day on December 15, 2024 – Parents Invited</span>
-        <span>📚 Mid-Term Results Announced – Visit Notice Board</span>
-        <span>🔬 New Chemistry Lab Inaugurated</span>
+        {% if marquee_items %}
+            {% for item in marquee_items %}
+                {% if item.get_url %}
+                    <a href="{{ item.get_url }}" style="color:white;text-decoration:none;">
+                        <span>{{ item.emoji }} {{ item.text }}</span>
+                    </a>
+                {% else %}
+                    <span>{{ item.emoji }} {{ item.text }}</span>
+                {% endif %}
+            {% endfor %}
+            {# Duplicate for seamless loop #}
+            {% for item in marquee_items %}
+                {% if item.get_url %}
+                    <a href="{{ item.get_url }}" style="color:white;text-decoration:none;">
+                        <span>{{ item.emoji }} {{ item.text }}</span>
+                    </a>
+                {% else %}
+                    <span>{{ item.emoji }} {{ item.text }}</span>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <span>📢 Welcome to DSST</span>
+
+        {% endif %}
     </div>
 </div>
 
@@ -263,20 +276,31 @@
                 </a>
             </div>
 
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="/labs/?type=science" style="text-decoration:none;color:inherit;">
-                    <div class="card h-100 text-center p-3" style="border-radius:14px;cursor:pointer;">
-                        <div style="width:55px;height:55px;border-radius:14px;background:#ffebee;
-                        display:flex;align-items:center;justify-content:center;
-                        font-size:1.4rem;margin:0 auto 12px;color:#c62828;">
-                            <i class="fas fa-flask"></i>
-                        </div>
-                        <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">
-                            Science Lab
-                        </div>
-                    </div>
-                </a>
+                <div class="col-6 col-md-4 col-lg-2">
+        <a href="/labs/?type=physics" style="text-decoration:none;color:inherit;">
+            <div class="card h-100 text-center p-3" style="border-radius:14px;cursor:pointer;">
+                <div style="width:55px;height:55px;border-radius:14px;background:#f3e5f5;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#6a1b9a;"><i class="fas fa-atom"></i></div>
+                <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Physics Lab</div>
             </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a href="/labs/?type=chemistry" style="text-decoration:none;color:inherit;">
+            <div class="card h-100 text-center p-3" style="border-radius:14px;cursor:pointer;">
+                <div style="width:55px;height:55px;border-radius:14px;background:#ffebee;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#c62828;"><i class="fas fa-flask"></i></div>
+                <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Chemistry Lab</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a href="/labs/?type=biology" style="text-decoration:none;color:inherit;">
+            <div class="card h-100 text-center p-3" style="border-radius:14px;cursor:pointer;">
+                <div style="width:55px;height:55px;border-radius:14px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 12px;color:#2e7d32;"><i class="fas fa-leaf"></i></div>
+                <div style="font-size:0.82rem;font-weight:600;color:var(--primary);">Biology Lab</div>
+            </div>
+        </a>
+    </div>
+            
 
             <div class="col-6 col-md-4 col-lg-2">
                 <a href="/labs/?type=library" style="text-decoration:none;color:inherit;">
@@ -433,7 +457,7 @@
 <section class="cta-section" style="background:linear-gradient(135deg,#1a3a6e,#1565c0);padding:70px 0;color:white;text-align:center;">
     <div class="container">
         <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.5rem);margin-bottom:12px;">Ready to Join DSST?</h2>
-        <p style="color:rgba(255,255,255,0.8);max-width:480px;margin:0 auto 28px;font-size:1rem;">Admissions open for 2024–25. Fill out the online form and take the first step today.</p>
+        <p style="color:rgba(255,255,255,0.8);max-width:480px;margin:0 auto 28px;font-size:1rem;">Admissions open for 2026-27. Fill out the online form and take the first step today.</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
             <a href="/admission/" class="btn btn-warning btn-lg px-4 rounded-pill fw-bold"><i class="fas fa-user-graduate me-2"></i>Apply for Admission</a>
             <a href="/contact/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Contact Us</a>

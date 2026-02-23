@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, FeePayment, GalleryImage, GalleryCategory, Department, Teacher, Lab, Achievement, ContactMessage, AdmissionApplication
+from .models import MarqueeItem, Post, FeePayment, GalleryImage, GalleryCategory, Department, Teacher, Lab, Achievement, ContactMessage, AdmissionApplication
 
 
 @admin.register(Post)
@@ -87,3 +87,9 @@ class AdmissionApplicationAdmin(admin.ModelAdmin):
         ('Contact', {'fields': ('email', 'address', 'city', 'pincode', 'how_did_you_hear', 'remarks')}),
         ('Application Status', {'fields': ('application_number', 'status', 'session', 'applied_at')}),
     )
+
+@admin.register(MarqueeItem)
+class MarqueeItemAdmin(admin.ModelAdmin):
+    list_display = ['emoji', 'text', 'link_post', 'custom_url', 'is_active', 'order']
+    list_editable = ['is_active', 'order']
+    list_filter = ['is_active']

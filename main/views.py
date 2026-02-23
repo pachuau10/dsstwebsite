@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Post, FeePayment, Teacher, Department, Lab, GalleryImage, GalleryCategory, Achievement, ContactMessage
+from .models import MarqueeItem, Post, FeePayment, Teacher, Department, Lab, GalleryImage, GalleryCategory, Achievement, ContactMessage
 import uuid
 
 
@@ -13,6 +13,7 @@ def home(request):
     featured_teachers = Teacher.objects.filter(is_featured=True)[:4]
     featured_achievements = Achievement.objects.filter(is_featured=True)[:6]
     featured_gallery = GalleryImage.objects.filter(is_featured=True)[:8]
+    marquee_items = MarqueeItem.objects.filter(is_active=True)
     context = {
         'pinned_posts': pinned_posts,
         'latest_posts': latest_posts,
@@ -20,13 +21,14 @@ def home(request):
         'featured_teachers': featured_teachers,
         'featured_achievements': featured_achievements,
         'featured_gallery': featured_gallery,
+        'marquee_items': marquee_items,
     }
     return render(request, 'main/home.html', context)
 
 def lab_detail(request, pk):
     lab = get_object_or_404(Lab, pk=pk)
-    return render(request, 'main/lab_detail.html', {'lab': lab})
-
+    other_labs = Lab.objects.filter(is_featured=True).exclude(pk=pk)[:4]
+    return render(request, 'main/lab_detail.html', {'lab': lab, 'other_labs': other_labs})
 
 def notice_board(request):
     post_type = request.GET.get('type', '')
