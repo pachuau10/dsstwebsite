@@ -30,7 +30,11 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
+    
+    def get_document_url(self):
+        if self.document:
+            return self.document.url.replace('/raw/upload/', '/raw/upload/fl_attachment/')
+        return None
 
 class FeePayment(models.Model):
     PAYMENT_STATUS = [('pending','Pending'),('completed','Completed'),('failed','Failed')]

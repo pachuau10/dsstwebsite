@@ -136,10 +136,10 @@
                     {% endif %}
                 </div>
                 <div class="row g-2 mt-3">
-                    <div class="col-3 stat-box"><div class="num">2500+</div><div class="lbl">Students</div></div>
-                    <div class="col-3 stat-box"><div class="num">120+</div><div class="lbl">Teachers</div></div>
+                    <div class="col-3 stat-box"><div class="num">250+</div><div class="lbl">Students</div></div>
+                    <div class="col-3 stat-box"><div class="num">10+</div><div class="lbl">Teachers</div></div>
                     <div class="col-3 stat-box"><div class="num">98%</div><div class="lbl">Pass Rate</div></div>
-                    <div class="col-3 stat-box"><div class="num">39</div><div class="lbl">Years</div></div>
+                    <div class="col-3 stat-box"><div class="num">22</div><div class="lbl">Years</div></div>
                 </div>
             </div>
             <div class="col-lg-5 d-none d-lg-block">
@@ -147,13 +147,16 @@
                     <div class="row g-2">
                         <div class="col-6"><div class="info-box" style="background:#e8f4fd;"><div style="font-size:1.5rem;margin-bottom:6px;">📚</div><div style="font-weight:700;color:#1a3a6e;font-size:0.92rem;">Academic Excellence</div><div style="font-size:0.78rem;color:#888;">Top-ranked curriculum</div></div></div>
                         <div class="col-6"><div class="info-box" style="background:#fff3e0;"><div style="font-size:1.5rem;margin-bottom:6px;">🏆</div><div style="font-weight:700;color:#e8a020;font-size:0.92rem;">Sports & Arts</div><div style="font-size:0.78rem;color:#888;">50+ activities</div></div></div>
-                        <div class="col-6"><div class="info-box" style="background:#e8f5e9;"><div style="font-size:1.5rem;margin-bottom:6px;">🔬</div><div style="font-weight:700;color:#2e7d32;font-size:0.92rem;">Modern Labs</div><div style="font-size:0.78rem;color:#888;">10+ Laboratories</div></div></div>
+                        <div class="col-6"><div class="info-box" style="background:#e8f5e9;"><div style="font-size:1.5rem;margin-bottom:6px;">🔬</div><div style="font-weight:700;color:#2e7d32;font-size:0.92rem;">Modern Labs</div><div style="font-size:0.78rem;color:#888;">5+ Laboratories</div></div></div>
                         <div class="col-6"><div class="info-box" style="background:#fce4ec;"><div style="font-size:1.5rem;margin-bottom:6px;">🛡️</div><div style="font-weight:700;color:#c2185b;font-size:0.92rem;">Safe Campus</div><div style="font-size:0.78rem;color:#888;">24/7 CCTV Security</div></div></div>
                     </div>
                     <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
                         <div style="font-size:0.83rem;color:#666;"><i class="fas fa-circle text-success me-1" style="font-size:0.6rem;"></i>Admissions Open 2026–27</div>
-                        <a href="/admission/" class="btn btn-sm btn-primary rounded-pill px-3">Apply Now</a>
-                    </div>
+                    {% if admission_open %}
+                    <a href="/admission/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Apply Now</a>
+                    {% else %}
+                    <a href="/notices/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Announcement</a>
+                    {% endif %}                    </div>
                 </div>
             </div>
         </div>
