@@ -85,10 +85,17 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'dsstwebsite.onrender.com',
+    'www.dsstwebsite.onrender.com',
     'localhost',
     '127.0.0.1',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://dsstwebsite.onrender.com',
+    'https://www.dsstwebsite.onrender.com',
+]
+
+APPEND_SLASH = True 
 # APPLICATIONS
 INSTALLED_APPS = [
     "unfold",
