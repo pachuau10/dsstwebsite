@@ -24,6 +24,7 @@ def home(request):
         'featured_achievements': featured_achievements,
         'featured_gallery': featured_gallery,
         'marquee_items': marquee_items,
+        'admission_open': session is not None and session.is_active,
 
     }
     return render(request, 'main/home.html', context)
