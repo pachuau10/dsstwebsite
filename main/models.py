@@ -208,10 +208,10 @@ class AdmissionApplication(models.Model):
     dob = models.DateField(verbose_name='Date of Birth')
     gender = models.CharField(max_length=10, choices=GENDERS)
     blood_group = models.CharField(max_length=5, choices=BLOOD_GROUPS, blank=True)
-    applying_for_class = models.CharField(max_length=10, choices=CLASSES)
+    applying_for_class = models.CharField(max_length=100, choices=CLASSES)
     previous_school = models.CharField(max_length=200, blank=True)
     previous_class = models.CharField(max_length=20, blank=True)
-    previous_percentage = models.CharField(max_length=10, blank=True)
+    previous_percentage = models.CharField(max_length=100, blank=True)
 
     # Parent Info
     father_name = models.CharField(max_length=100)
@@ -268,3 +268,90 @@ class MarqueeItem(models.Model):
         if self.link_post:
             return f'/notices/{self.link_post.pk}/'
         return self.custom_url or None
+
+
+class SiteSettings(models.Model):
+    admission_open = models.BooleanField(default=True)
+    admission_closed_message = models.TextField(
+        default="Admissions for this session are now closed. Please check back later for the next session."
+    )
+    admission_open_date = models.DateField(
+        null=True, blank=True,
+        help_text="Next admission opening date (optional)"
+    )
+
+    class Meta:
+        verbose_name = "Site Settings"
+        verbose_name_plural = "Site Settings"
+
+    def __str__(self):
+        return "Site Settings"
+
+    @classmethod
+    def get_settings(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+    
+
+class AdmissionSession(models.Model):
+    """Admin controls everything from here"""
+    session_name = models.CharField(max_length=100, help_text="e.g. 2026-27")
+    is_active = models.BooleanField(default=True, help_text="Toggle admission open/close")
+    
+    # Important Dates
+    forms_open_date = models.DateField(null=True, blank=True)
+    forms_close_date = models.DateField(null=True, blank=True)
+    admission_test_date = models.CharField(max_length=100, blank=True, help_text="e.g. March 23-24, 2026")
+    result_date = models.DateField(null=True, blank=True)
+    
+    # Fee Structure
+    monthly_fee = models.DecimalField(max_digits=10, decimal_places=2, default=3000)
+    registration_fee = models.DecimalField(max_digits=10, decimal_places=2, default=200)
+    admission_fee = models.DecimalField(max_digits=10, decimal_places=2, default=5000)
+    
+    # Closed message
+    closed_message = models.TextField(
+        default="Admissions for this session are now closed. Please check back later."
+    )
+    next_open_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Admission Session"
+
+    def __str__(self):
+        return f"Admission {self.session_name}"
+
+    @classmethod
+    def get_active(cls):
+        return cls.objects.filter(is_active=True).first()
+
+
+class AdmissionClass(models.Model):
+    """Classes available for admission"""
+    session = models.ForeignKey(AdmissionSession, on_delete=models.CASCADE, related_name='classes')
+    class_name = models.CharField(max_length=20, help_text="e.g. Class XI")
+    combination = models.CharField(max_length=200, help_text="e.g. PCMB + Mizo")
+    combination_full = models.TextField(help_text="e.g. Physics, Chemistry, Mathematics, Biology, English, Mizo")
+    value = models.CharField(max_length=100, help_text="Form value e.g. XI-PCMB+Mizo")
+    is_available = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.class_name} — {self.combination}"
+
+
+class AdmissionDocument(models.Model):
+    """Documents required list"""
+    session = models.ForeignKey(AdmissionSession, on_delete=models.CASCADE, related_name='documents')
+    document_name = models.CharField(max_length=200)
+    is_required = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.document_name

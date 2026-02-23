@@ -1,5 +1,5 @@
 {% extends 'main/base.html' %}
-{% block title %}Admission 2026-27 – DSST{% endblock %}
+{% block title %}Admission {% if session %}{{ session.session_name }}{% endif %} – DSST{% endblock %}
 {% block og_title %}Admissions – DSST{% endblock %}
 {% block og_description %}Apply for admission at DSST, Aizawl. Quality CBSE education for a brighter future.{% endblock %}
 
@@ -27,18 +27,25 @@
 {% block content %}
 <div class="page-header">
     <div class="container">
-        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item active text-white">Admission 2024-25</li></ol></nav>
-        <h1 style="font-family:'Playfair Display',serif;" class="mb-1">🎓 Admission Portal 2026-27</h1>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item active text-white">Admission {% if session %}{{ session.session_name }}{% endif %}</li></ol></nav>
+        <h1 style="font-family:'Playfair Display',serif;" class="mb-1">🎓 Admission Portal {% if session %}{{ session.session_name }}{% endif %}</h1>
         <p style="color:rgba(255,255,255,0.8);">Apply online for Class XI Science. Choose your subject combination below.</p>
-
+        {% if admission_open %}
         <div class="d-flex gap-3 flex-wrap mt-3">
-            <span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-calendar me-1"></i>Forms open: March 1 – March 20, 2026</span>
-            <span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-file-alt me-1"></i>Admission Test: March 23-24</span>
-            <span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-check-circle me-1"></i>Results: March 30</span>
+            {% if session.forms_open_date %}<span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-calendar me-1"></i>Forms open: {{ session.forms_open_date|date:"M d" }} – {{ session.forms_close_date|date:"M d, Y" }}</span>{% endif %}
+            {% if session.admission_test_date %}<span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-file-alt me-1"></i>Admission Test: {{ session.admission_test_date }}</span>{% endif %}
+            {% if session.result_date %}<span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-check-circle me-1"></i>Results: {{ session.result_date|date:"M d, Y" }}</span>{% endif %}
         </div>
+        {% else %}
+        <div class="d-flex gap-3 flex-wrap mt-3">
+            <span style="background:rgba(220,53,69,0.3);border:1px solid rgba(220,53,69,0.5);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-times-circle me-1"></i>Admissions Currently Closed</span>
+        </div>
+        {% endif %}
     </div>
 </div>
 
+{% if admission_open %}
+<!-- ADMISSION FORM -->
 <section class="section-py bg-light-custom">
     <div class="container">
         <div class="row g-4">
@@ -46,28 +53,14 @@
             <!-- LEFT: FORM -->
             <div class="col-lg-8">
                 <div class="card p-4 p-md-5">
-
-                    <!-- Step Indicator -->
                     <div class="step-indicator">
-                        <div class="step">
-                            <div class="step-num active" id="step-num-1">1</div>
-                            <div class="step-label active" id="step-lbl-1">Student Info</div>
-                        </div>
+                        <div class="step"><div class="step-num active" id="step-num-1">1</div><div class="step-label active" id="step-lbl-1">Student Info</div></div>
                         <div class="step-divider"></div>
-                        <div class="step">
-                            <div class="step-num" id="step-num-2">2</div>
-                            <div class="step-label" id="step-lbl-2">Parent Info</div>
-                        </div>
+                        <div class="step"><div class="step-num" id="step-num-2">2</div><div class="step-label" id="step-lbl-2">Parent Info</div></div>
                         <div class="step-divider"></div>
-                        <div class="step">
-                            <div class="step-num" id="step-num-3">3</div>
-                            <div class="step-label" id="step-lbl-3">Contact</div>
-                        </div>
+                        <div class="step"><div class="step-num" id="step-num-3">3</div><div class="step-label" id="step-lbl-3">Contact</div></div>
                         <div class="step-divider"></div>
-                        <div class="step">
-                            <div class="step-num" id="step-num-4">4</div>
-                            <div class="step-label" id="step-lbl-4">Review</div>
-                        </div>
+                        <div class="step"><div class="step-num" id="step-num-4">4</div><div class="step-label" id="step-lbl-4">Review</div></div>
                     </div>
 
                     <form method="post" id="admissionForm">
@@ -104,19 +97,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Applying for Class <span class="text-danger">*</span></label>
-<select name="applying_for_class" class="form-select mb-3" id="comboSelect" required>
-    <option value="">Select Class & Subject Combination</option>
-    <optgroup label="Class XI">
-        <option value="XI-PCMB+Mizo">Class XI — PCMB + Mizo (Physics, Chemistry, Mathematics, Biology, English, Mizo)</option>
-        <option value="XI-PCMCS+Mizo">Class XI — PCMCS + Mizo (Physics, Chemistry, Mathematics, Computer Science, English, Mizo)</option>
-        <option value="XI-PCBCS+Mizo">Class XI — PCBCS + Mizo (Physics, Chemistry, Biology, Computer Science, English, Mizo)</option>
-    </optgroup>
-    <optgroup label="Class XII">
-        <option value="XII-PCMB+Mizo">Class XII — PCMB + Mizo (Physics, Chemistry, Mathematics, Biology, English, Mizo)</option>
-        <option value="XII-PCMCS+Mizo">Class XII — PCMCS + Mizo (Physics, Chemistry, Mathematics, Computer Science, English, Mizo)</option>
-        <option value="XII-PCBCS+Mizo">Class XII — PCBCS + Mizo (Physics, Chemistry, Biology, Computer Science, English, Mizo)</option>
-    </optgroup>
-</select>
+                                    <select name="applying_for_class" class="form-select mb-3" id="comboSelect" required>
+                                        <option value="">Select Class & Subject Combination</option>
+                                        {% regroup classes by class_name as class_groups %}
+                                        {% for group in class_groups %}
+                                        <optgroup label="{{ group.grouper }}">
+                                            {% for cls in group.list %}
+                                            <option value="{{ cls.value }}">{{ group.grouper }} — {{ cls.combination }} ({{ cls.combination_full }})</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Previous School</label>
@@ -125,12 +116,12 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Previous Class Passed</label>
                                     <select name="previous_class" class="form-select">
-    <option value="">Select Board</option>
-    <option>CBSE</option>
-    <option>MBSE (Mizoram Board)</option>
-    <option>ICSE</option>
-    <option>Other State Board</option>
-</select>
+                                        <option value="">Select Board</option>
+                                        <option>CBSE</option>
+                                        <option>MBSE (Mizoram Board)</option>
+                                        <option>ICSE</option>
+                                        <option>Other State Board</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Marks/Percentage</label>
@@ -251,41 +242,58 @@
                 <!-- Important Dates -->
                 <div class="card p-4 mb-4" style="border-top:4px solid var(--secondary);">
                     <h6 class="fw-700 mb-3" style="color:var(--primary);"><i class="fas fa-calendar-alt me-2 text-warning"></i>Important Dates</h6>
+                    {% if session.forms_open_date %}
                     <div class="d-flex gap-3 mb-3 align-items-start">
-                        <div style="width:42px;height:42px;border-radius:10px;background:#e8f4fd;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--primary);font-weight:700;font-size:0.8rem;">OCT<br>15</div>
-                        <div><div style="font-weight:600;font-size:0.88rem;">Forms Open</div><div style="font-size:0.78rem;color:#888;">March 1, 2026</div></div>
+                        <div style="width:42px;height:42px;border-radius:10px;background:#e8f4fd;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--primary);font-weight:700;font-size:0.8rem;text-align:center;line-height:1.2;">{{ session.forms_open_date|date:"M" }}<br>{{ session.forms_open_date|date:"d" }}</div>
+                        <div><div style="font-weight:600;font-size:0.88rem;">Forms Open</div><div style="font-size:0.78rem;color:#888;">{{ session.forms_open_date|date:"d F Y" }}</div></div>
                     </div>
+                    {% endif %}
+                    {% if session.forms_close_date %}
                     <div class="d-flex gap-3 mb-3 align-items-start">
-                        <div style="width:42px;height:42px;border-radius:10px;background:#fff3e0;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#e65100;font-weight:700;font-size:0.8rem;">NOV<br>30</div>
-                        <div><div style="font-weight:600;font-size:0.88rem;">Last Date for Forms</div><div style="font-size:0.78rem;color:#888;">March 20, 2026</div></div>
+                        <div style="width:42px;height:42px;border-radius:10px;background:#fff3e0;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#e65100;font-weight:700;font-size:0.8rem;text-align:center;line-height:1.2;">{{ session.forms_close_date|date:"M" }}<br>{{ session.forms_close_date|date:"d" }}</div>
+                        <div><div style="font-weight:600;font-size:0.88rem;">Last Date for Forms</div><div style="font-size:0.78rem;color:#888;">{{ session.forms_close_date|date:"d F Y" }}</div></div>
                     </div>
+                    {% endif %}
+                    {% if session.admission_test_date %}
                     <div class="d-flex gap-3 mb-3 align-items-start">
-                        <div style="width:42px;height:42px;border-radius:10px;background:#ffebee;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#c62828;font-weight:700;font-size:0.8rem;">DEC<br>10</div>
-                        <div><div style="font-weight:600;font-size:0.88rem;">Admission Test</div><div style="font-size:0.78rem;color:#888;">March 23-24, 2026</div></div>
+                        <div style="width:42px;height:42px;border-radius:10px;background:#ffebee;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#c62828;font-weight:700;font-size:0.8rem;text-align:center;line-height:1.2;">TEST</div>
+                        <div><div style="font-weight:600;font-size:0.88rem;">Admission Test</div><div style="font-size:0.78rem;color:#888;">{{ session.admission_test_date }}</div></div>
                     </div>
+                    {% endif %}
+                    {% if session.result_date %}
                     <div class="d-flex gap-3 align-items-start">
-                        <div style="width:42px;height:42px;border-radius:10px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#2e7d32;font-weight:700;font-size:0.8rem;">DEC<br>20</div>
-                        <div><div style="font-weight:600;font-size:0.88rem;">Result Announcement</div><div style="font-size:0.78rem;color:#888;">March 30, 2026</div></div>
+                        <div style="width:42px;height:42px;border-radius:10px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#2e7d32;font-weight:700;font-size:0.8rem;text-align:center;line-height:1.2;">{{ session.result_date|date:"M" }}<br>{{ session.result_date|date:"d" }}</div>
+                        <div><div style="font-weight:600;font-size:0.88rem;">Result Announcement</div><div style="font-size:0.78rem;color:#888;">{{ session.result_date|date:"d F Y" }}</div></div>
                     </div>
+                    {% endif %}
                 </div>
 
                 <!-- Fee Structure -->
                 <div class="card p-4 mb-4">
-                    <div class="d-flex justify-content-between py-2" style="font-size:0.85rem;"><span>Class XI – XII</span><strong>₹ 3,000/mo</strong></div>
-                    <div style="background:#e8f5e9;border-radius:8px;padding:10px;margin-top:12px;font-size:0.8rem;color:#2e7d32;"><i class="fas fa-info-circle me-1"></i>Registration fee ₹200 (non-refundable). One-time admission fee ₹5,000 on selection.</div>
+                    <h6 class="fw-700 mb-3" style="color:var(--primary);"><i class="fas fa-rupee-sign me-2 text-success"></i>Fee Structure</h6>
+                    <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:0.85rem;"><span>Monthly Fee</span><strong>&#8377; {{ session.monthly_fee }}/mo</strong></div>
+                    <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:0.85rem;"><span>Registration Fee</span><strong>&#8377; {{ session.registration_fee }}</strong></div>
+                    <div class="d-flex justify-content-between py-2" style="font-size:0.85rem;"><span>Admission Fee (on selection)</span><strong>&#8377; {{ session.admission_fee }}</strong></div>
+                    <div style="background:#e8f5e9;border-radius:8px;padding:10px;margin-top:12px;font-size:0.8rem;color:#2e7d32;"><i class="fas fa-info-circle me-1"></i>Registration fee is non-refundable.</div>
                 </div>
 
                 <!-- Documents Required -->
                 <div class="card p-4 mb-4">
                     <h6 class="fw-700 mb-3" style="color:var(--primary);"><i class="fas fa-folder-open me-2 text-info"></i>Documents Required</h6>
                     <ul style="padding-left:18px;font-size:0.85rem;color:#555;line-height:2;">
-                        <li>Birth Certificate</li>
-                        <li>Aadhaar Card (Student & Parents)</li>
-                        <li>Previous School Transfer Certificate</li>
-                        <li>Last Year's Report Card / Marksheet</li>
-                        <li>Passport Size Photos (4 nos.)</li>
-                        <li>Caste Certificate (if applicable)</li>
-                        <li>Medical Certificate</li>
+                        {% if documents %}
+                            {% for doc in documents %}
+                            <li>{{ doc.document_name }}{% if not doc.is_required %} <span style="color:#aaa;font-size:0.75rem;">(optional)</span>{% endif %}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>Birth Certificate</li>
+                            <li>Aadhaar Card (Student & Parents)</li>
+                            <li>Previous School Transfer Certificate</li>
+                            <li>Last Year's Report Card / Marksheet</li>
+                            <li>Passport Size Photos (4 nos.)</li>
+                            <li>Caste Certificate (if applicable)</li>
+                            <li>Medical Certificate</li>
+                        {% endif %}
                     </ul>
                     <div style="background:#fff3e0;border-radius:8px;padding:10px;font-size:0.8rem;color:#e65100;"><i class="fas fa-exclamation-circle me-1"></i>Bring originals + 2 photocopies at the time of admission test.</div>
                 </div>
@@ -294,22 +302,76 @@
                 <div class="card p-4" style="background:linear-gradient(135deg,var(--primary),#1565c0);color:white;">
                     <h6 class="fw-700 mb-3"><i class="fas fa-headset me-2"></i>Need Help?</h6>
                     <p style="font-size:0.85rem;color:rgba(255,255,255,0.85);">Our admission team is available Mon–Sat, 9 AM – 4 PM.</p>
-                    <a href="tel:+919876543210" class="btn btn-warning btn-sm rounded-pill w-100 mb-2 fw-bold"><i class="fas fa-phone me-1"></i>+91 93626 03236</a>
-                    <a href="mailto:admissions@greenwoodschool.edu" class="btn btn-outline-light btn-sm rounded-pill w-100" style="font-size:0.8rem;"><i class="fas fa-envelope me-1"></i>admissions@dsstschool.edu</a>
+                    <a href="tel:+919362603236" class="btn btn-warning btn-sm rounded-pill w-100 mb-2 fw-bold"><i class="fas fa-phone me-1"></i>+91 93626 03236</a>
+                    <a href="mailto:admissions@dsstschool.edu" class="btn btn-outline-light btn-sm rounded-pill w-100" style="font-size:0.8rem;"><i class="fas fa-envelope me-1"></i>admissions@dsstschool.edu</a>
                 </div>
             </div>
 
         </div>
     </div>
 </section>
+
+{% else %}
+<!-- ADMISSIONS CLOSED -->
+<section class="section-py bg-light-custom">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-9">
+                <div class="card text-center p-5" style="border-radius:24px;">
+                    <div style="font-size:5rem;margin-bottom:16px;">🎓</div>
+                    <h2 style="font-family:'Playfair Display',serif;color:var(--primary);margin-bottom:12px;">Admissions Closed</h2>
+                    <p style="color:#666;font-size:1rem;line-height:1.8;max-width:480px;margin:0 auto 24px;">
+                        {% if session %}{{ session.closed_message }}{% else %}Admissions for this session are now closed. Please check back later.{% endif %}
+                    </p>
+                    {% if session and session.next_open_date %}
+                    <div style="background:#e8f4fd;border-radius:14px;padding:18px;margin-bottom:24px;display:inline-block;">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                        <strong>Next admissions open from:</strong>
+                        <span style="color:var(--primary);font-weight:700;margin-left:6px;">{{ session.next_open_date|date:"d F Y" }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="row g-3 mb-4 text-start">
+                        <div class="col-md-4">
+                            <div style="background:#f8f9fc;border-radius:14px;padding:18px;height:100%;">
+                                <div style="font-size:1.8rem;margin-bottom:8px;">📋</div>
+                                <div style="font-weight:700;font-size:0.88rem;color:var(--primary);margin-bottom:4px;">Stay Updated</div>
+                                <div style="font-size:0.8rem;color:#888;">Check our notice board for latest announcements about upcoming admissions.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="background:#f8f9fc;border-radius:14px;padding:18px;height:100%;">
+                                <div style="font-size:1.8rem;margin-bottom:8px;">📞</div>
+                                <div style="font-weight:700;font-size:0.88rem;color:var(--primary);margin-bottom:4px;">Contact Us</div>
+                                <div style="font-size:0.8rem;color:#888;">Call us at +91 93626 03236 for enquiries about the next session.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="background:#f8f9fc;border-radius:14px;padding:18px;height:100%;">
+                                <div style="font-size:1.8rem;margin-bottom:8px;">🏫</div>
+                                <div style="font-weight:700;font-size:0.88rem;color:var(--primary);margin-bottom:4px;">Visit Campus</div>
+                                <div style="font-size:0.8rem;color:#888;">Mon–Sat, 9 AM – 4 PM. Come visit us at Dawrpui, Aizawl.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a href="/notices/" class="btn btn-primary rounded-pill px-4"><i class="fas fa-bell me-2"></i>View Notices</a>
+                        <a href="/contact/" class="btn btn-outline-primary rounded-pill px-4"><i class="fas fa-envelope me-2"></i>Contact Us</a>
+                        <a href="/" class="btn btn-outline-secondary rounded-pill px-4"><i class="fas fa-home me-2"></i>Go Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
+{% if admission_open %}
 <script>
 let currentStep = 1;
 
 function nextStep(step) {
-    // Validate current step before moving forward
     if (step > currentStep) {
         const section = document.getElementById('section-' + currentStep);
         const required = section.querySelectorAll('[required]');
@@ -323,16 +385,12 @@ function nextStep(step) {
                 field.style.borderColor = '#e8e8e8';
             }
         });
-        if (!valid) {
-            return;
-        }
+        if (!valid) return;
     }
 
-    // Update sections
     document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
     document.getElementById('section-' + step).classList.add('active');
 
-    // Update step indicators
     for (let i = 1; i <= 4; i++) {
         const num = document.getElementById('step-num-' + i);
         const lbl = document.getElementById('step-lbl-' + i);
@@ -344,10 +402,7 @@ function nextStep(step) {
     }
 
     currentStep = step;
-
-    // Build review on step 4
     if (step === 4) buildReview();
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -360,7 +415,7 @@ function buildReview() {
             <div class="col-6"><span style="color:#aaa;">Name</span><div style="font-weight:600;">${get('student_name')}</div></div>
             <div class="col-6"><span style="color:#aaa;">Date of Birth</span><div style="font-weight:600;">${get('dob')}</div></div>
             <div class="col-6"><span style="color:#aaa;">Gender</span><div style="font-weight:600;">${get('gender')}</div></div>
-            <div class="col-6"><span style="color:#aaa;">Applying for</span><div style="font-weight:600;">Class ${get('applying_for_class')}</div></div>
+            <div class="col-6"><span style="color:#aaa;">Applying for</span><div style="font-weight:600;">${get('applying_for_class')}</div></div>
             <div class="col-6"><span style="color:#aaa;">Blood Group</span><div style="font-weight:600;">${get('blood_group') || '—'}</div></div>
             <div class="col-6"><span style="color:#aaa;">Previous School</span><div style="font-weight:600;">${get('previous_school') || '—'}</div></div>
         </div>
@@ -383,4 +438,5 @@ function buildReview() {
     document.getElementById('reviewContent').innerHTML = html;
 }
 </script>
+{% endif %}
 {% endblock %}

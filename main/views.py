@@ -95,7 +95,6 @@ def teachers(request):
         teacher_list = teacher_list.filter(department_id=department_id)
     if search:
         teacher_list = teacher_list.filter(Q(name__icontains=search) | Q(subjects__icontains=search))
-    # Group by designation order
     principal = teacher_list.filter(designation='principal').first()
     vp = teacher_list.filter(designation='vice_principal')
     hods = teacher_list.filter(designation='hod')
@@ -179,8 +178,21 @@ def contact(request):
 
 
 def admission(request):
+    from .models import AdmissionSession, AdmissionApplication
+
+    session = AdmissionSession.get_active()
+
+    # No active session or admissions closed
+    if not session or not session.is_active:
+        return render(request, 'main/admission.html', {
+            'admission_open': False,
+            'session': session,
+        })
+
+    classes = session.classes.filter(is_available=True)
+    documents = session.documents.all()
+
     if request.method == 'POST':
-        from .models import AdmissionApplication
         app = AdmissionApplication.objects.create(
             student_name=request.POST.get('student_name'),
             dob=request.POST.get('dob'),
@@ -204,8 +216,13 @@ def admission(request):
             remarks=request.POST.get('remarks', ''),
         )
         return redirect('admission_success', pk=app.pk)
-    return render(request, 'main/admission.html')
 
+    return render(request, 'main/admission.html', {
+        'admission_open': True,
+        'session': session,
+        'classes': classes,
+        'documents': documents,
+    })
 
 def admission_success(request, pk):
     from .models import AdmissionApplication

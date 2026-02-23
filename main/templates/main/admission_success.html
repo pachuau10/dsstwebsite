@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-6">
                                 <div style="color:#aaa;font-size:0.78rem;">APPLYING FOR</div>
-                                <div style="font-weight:600;">Class {{ application.applying_for_class }}</div>
+                                <div style="font-weight:600;">{{ application.applying_for_class }}</div>
                             </div>
                             <div class="col-6">
                                 <div style="color:#aaa;font-size:0.78rem;">SUBMITTED ON</div>
@@ -44,9 +44,17 @@
                         <ol style="font-size:0.85rem;color:#555;line-height:2;padding-left:20px;margin:0;">
                             <li>Our admissions team will review your application within 2–3 working days.</li>
                             <li>You will receive an email confirmation at <strong>{{ application.email }}</strong>.</li>
-                            <li>Shortlisted students will be called for an admission test on <strong>Dec 10–12, 2024</strong>.</li>
+                            {% if session and session.admission_test_date %}
+                            <li>Shortlisted students will be called for the admission test on <strong>{{ session.admission_test_date }}</strong>.</li>
+                            {% else %}
+                            <li>Shortlisted students will be called for an admission test. Date will be communicated via email.</li>
+                            {% endif %}
                             <li>Bring all original documents + photocopies on test day.</li>
-                            <li>Results will be announced on <strong>December 20, 2024</strong>.</li>
+                            {% if session and session.result_date %}
+                            <li>Results will be announced on <strong>{{ session.result_date|date:"d F Y" }}</strong>.</li>
+                            {% else %}
+                            <li>Results will be announced after the admission test. You will be notified via email.</li>
+                            {% endif %}
                         </ol>
                     </div>
 

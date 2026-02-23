@@ -5,6 +5,26 @@
 
 {% block extra_css %}
 <style>
+    .marquee-inner { 
+    display: inline-flex; 
+    /* Lowering 30s to 15s makes it twice as fast */
+    animation: marquee 8s linear infinite; 
+    white-space: nowrap;
+    /* This ensures the animation starts completely off-screen to the right */
+    padding-left: 50%; 
+}
+
+@keyframes marquee { 
+    /* Starts from the right edge of the container */
+    0% { transform: translateX(0); } 
+    /* Moves all the way to the left until the text disappears */
+    100% { transform: translateX(-100%); } 
+}
+
+/* Optional: Pause on hover so people can actually read the fast text */
+.marquee-bar:hover .marquee-inner {
+    animation-play-state: paused;
+}
     .hero { background: linear-gradient(135deg, #1a3a6e 0%, #1565c0 55%, #0d47a1 100%); min-height: 88vh; display: flex; align-items: center; position: relative; overflow: hidden; }
     .hero::before { content:''; position:absolute; top:-100px; right:-100px; width:500px; height:500px; background:rgba(255,255,255,0.03); border-radius:50%; pointer-events:none; }
     .hero::after { content:''; position:absolute; bottom:-150px; left:-80px; width:400px; height:400px; background:rgba(255,255,255,0.025); border-radius:50%; pointer-events:none; }

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin as UnfoldModelAdmin
-from .models import MarqueeItem, Post, FeePayment, GalleryImage, GalleryCategory, Department, Teacher, Lab, Achievement, ContactMessage, AdmissionApplication
+from unfold.admin import ModelAdmin as UnfoldModelAdmin, TabularInline
+from .models import AdmissionClass, AdmissionDocument, AdmissionSession, MarqueeItem, Post, FeePayment, GalleryImage, GalleryCategory, Department, SiteSettings, Teacher, Lab, Achievement, ContactMessage, AdmissionApplication
+from unfold.admin import ModelAdmin
 
 
 @admin.register(Post)
@@ -95,3 +96,53 @@ class MarqueeItemAdmin(UnfoldModelAdmin):
     list_display = ['emoji', 'text', 'link_post', 'custom_url', 'is_active', 'order']
     list_editable = ['is_active', 'order']
     list_filter = ['is_active']
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(ModelAdmin):
+    list_display = ['admission_open', 'admission_open_date']
+    
+    # Unfold specific
+    compressed_fields = True
+    warn_unsaved_form = True
+
+    fieldsets = (
+        ("Admission Settings", {
+            "fields": ("admission_open", "admission_open_date", "admission_closed_message"),
+            "description": "Toggle admission form on/off from here.",
+        }),
+    )
+
+    def has_add_permission(self, request):
+        if self.model.objects.exists():
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+
+class AdmissionClassInline(TabularInline):
+    model = AdmissionClass
+    extra = 1
+
+class AdmissionDocumentInline(TabularInline):
+    model = AdmissionDocument
+    extra = 1
+
+@admin.register(AdmissionSession)
+class AdmissionSessionAdmin(ModelAdmin):
+    list_display = ['session_name', 'is_active', 'forms_open_date', 'forms_close_date']
+    inlines = [AdmissionClassInline, AdmissionDocumentInline]
+    compressed_fields = True
+    warn_unsaved_form = True
+    fieldsets = (
+        ("Session", {
+            "fields": ("session_name", "is_active", "closed_message", "next_open_date"),
+        }),
+        ("Important Dates", {
+            "fields": ("forms_open_date", "forms_close_date", "admission_test_date", "result_date"),
+        }),
+        ("Fee Structure", {
+            "fields": ("monthly_fee", "registration_fee", "admission_fee"),
+        }),
+    )
