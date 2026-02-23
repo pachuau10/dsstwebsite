@@ -1,9 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin
 from .models import MarqueeItem, Post, FeePayment, GalleryImage, GalleryCategory, Department, Teacher, Lab, Achievement, ContactMessage, AdmissionApplication
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(UnfoldModelAdmin):
     list_display = ['title', 'post_type', 'author', 'is_published', 'is_pinned', 'created_at']
     list_filter = ['post_type', 'is_published', 'is_pinned']
     search_fields = ['title', 'content']
@@ -16,7 +17,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(FeePayment)
-class FeePaymentAdmin(admin.ModelAdmin):
+class FeePaymentAdmin(UnfoldModelAdmin):
     list_display = ['student_name', 'student_id', 'class_name', 'fee_type', 'amount', 'status', 'payment_date']
     list_filter = ['fee_type', 'status', 'class_name']
     search_fields = ['student_name', 'student_id', 'transaction_id']
@@ -24,27 +25,27 @@ class FeePaymentAdmin(admin.ModelAdmin):
 
 
 @admin.register(GalleryCategory)
-class GalleryCategoryAdmin(admin.ModelAdmin):
+class GalleryCategoryAdmin(UnfoldModelAdmin):
     list_display = ['name', 'slug', 'order']
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ['order']
 
 
 @admin.register(GalleryImage)
-class GalleryImageAdmin(admin.ModelAdmin):
+class GalleryImageAdmin(UnfoldModelAdmin):
     list_display = ['title', 'category', 'is_featured', 'order', 'uploaded_at']
     list_filter = ['category', 'is_featured']
     list_editable = ['is_featured', 'order']
 
 
 @admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
+class DepartmentAdmin(UnfoldModelAdmin):
     list_display = ['name', 'icon', 'order']
     list_editable = ['order']
 
 
 @admin.register(Teacher)
-class TeacherAdmin(admin.ModelAdmin):
+class TeacherAdmin(UnfoldModelAdmin):
     list_display = ['name', 'designation', 'department', 'experience_years', 'is_featured', 'order']
     list_filter = ['designation', 'department', 'is_featured']
     search_fields = ['name', 'subjects']
@@ -52,14 +53,14 @@ class TeacherAdmin(admin.ModelAdmin):
 
 
 @admin.register(Lab)
-class LabAdmin(admin.ModelAdmin):
+class LabAdmin(UnfoldModelAdmin):
     list_display = ['name', 'lab_type', 'capacity', 'location', 'is_featured', 'order']
     list_filter = ['lab_type', 'is_featured']
     list_editable = ['is_featured', 'order']
 
 
 @admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
+class AchievementAdmin(UnfoldModelAdmin):
     list_display = ['title', 'category', 'level', 'year', 'winner_name', 'is_featured']
     list_filter = ['category', 'level', 'year', 'is_featured']
     list_editable = ['is_featured']
@@ -67,7 +68,7 @@ class AchievementAdmin(admin.ModelAdmin):
 
 
 @admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
+class ContactMessageAdmin(UnfoldModelAdmin):
     list_display = ['name', 'email', 'subject', 'submitted_at', 'is_read']
     list_filter = ['is_read']
     list_editable = ['is_read']
@@ -75,7 +76,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
 
 @admin.register(AdmissionApplication)
-class AdmissionApplicationAdmin(admin.ModelAdmin):
+class AdmissionApplicationAdmin(UnfoldModelAdmin):
     list_display = ['application_number', 'student_name', 'applying_for_class', 'father_name', 'father_phone', 'email', 'status', 'applied_at']
     list_filter = ['status', 'applying_for_class', 'gender', 'session']
     search_fields = ['application_number', 'student_name', 'father_name', 'email', 'father_phone']
@@ -88,8 +89,9 @@ class AdmissionApplicationAdmin(admin.ModelAdmin):
         ('Application Status', {'fields': ('application_number', 'status', 'session', 'applied_at')}),
     )
 
+
 @admin.register(MarqueeItem)
-class MarqueeItemAdmin(admin.ModelAdmin):
+class MarqueeItemAdmin(UnfoldModelAdmin):
     list_display = ['emoji', 'text', 'link_post', 'custom_url', 'is_active', 'order']
     list_editable = ['is_active', 'order']
     list_filter = ['is_active']

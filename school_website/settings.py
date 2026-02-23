@@ -3,12 +3,82 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 import cloudinary
+from django.templatetags.static import static
+from django.urls import reverse_lazy
 
 # Load .env file
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+UNFOLD = {
+    "SITE_TITLE": "DSST Admin",
+    "SITE_HEADER": "DSST School Management",
+    "SITE_URL": "/",
+    "SITE_ICON": None,
+    "SITE_SYMBOL": "school",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "COLORS": {
+        "primary": {
+            "50": "240 249 255",
+            "100": "224 242 254",
+            "200": "186 230 253",
+            "300": "125 211 252",
+            "400": "56 189 248",
+            "500": "14 165 233",
+            "600": "2 132 199",
+            "700": "3 105 161",
+            "800": "7 89 133",
+            "900": "12 74 110",
+            "950": "8 47 73",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Navigation",
+                "items": [
+                    {
+                        "title": "Dashboard",
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": "Content",
+                "collapsible": True,
+                "items": [
+                    {"title": "Notice Board", "icon": "newspaper", "link": reverse_lazy("admin:main_post_changelist")},
+                    {"title": "Marquee Items", "icon": "campaign", "link": reverse_lazy("admin:main_marqueeitem_changelist")},
+                    {"title": "Gallery", "icon": "photo_library", "link": reverse_lazy("admin:main_galleryimage_changelist")},
+                    {"title": "Achievements", "icon": "emoji_events", "link": reverse_lazy("admin:main_achievement_changelist")},
+                ],
+            },
+            {
+                "title": "School",
+                "collapsible": True,
+                "items": [
+                    {"title": "Teachers", "icon": "school", "link": reverse_lazy("admin:main_teacher_changelist")},
+                    {"title": "Departments", "icon": "category", "link": reverse_lazy("admin:main_department_changelist")},
+                    {"title": "Labs & Facilities", "icon": "science", "link": reverse_lazy("admin:main_lab_changelist")},
+                ],
+            },
+            {
+                "title": "Students",
+                "collapsible": True,
+                "items": [
+                    {"title": "Admissions", "icon": "how_to_reg", "link": reverse_lazy("admin:main_admissionapplication_changelist")},
+                    {"title": "Fee Payments", "icon": "payments", "link": reverse_lazy("admin:main_feepayment_changelist")},
+                    {"title": "Contact Messages", "icon": "mail", "link": reverse_lazy("admin:main_contactmessage_changelist")},
+                ],
+            },
+        ],
+    },
+}
 # SECURITY
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
@@ -21,6 +91,8 @@ ALLOWED_HOSTS = [
 
 # APPLICATIONS
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.filters",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
