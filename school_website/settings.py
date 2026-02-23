@@ -2,11 +2,8 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
-import cloudinary
-from django.templatetags.static import static
 from django.urls import reverse_lazy
 
-# Load .env file
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,14 +76,21 @@ UNFOLD = {
         ],
     },
 }
+
 # SECURITY
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'dsstwebsite.onrender.com',
+    'www.dsstwebsite.onrender.com',
     'localhost',
     '127.0.0.1',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://dsstwebsite.onrender.com',
+    'https://www.dsstwebsite.onrender.com',
 ]
 
 # APPLICATIONS
@@ -99,12 +103,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Cloudinary
     'cloudinary',
     'cloudinary_storage',
-
-    # Your app
     'main',
 ]
 
@@ -112,7 +112,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -141,7 +140,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'school_website.wsgi.application'
 
-# DATABASE (Neon)
+# DATABASE
 DATABASES = {
     'default': dj_database_url.parse(
         os.getenv('DATABASE_URL'),
@@ -150,15 +149,13 @@ DATABASES = {
     )
 }
 
-# CLOUDINARY CONFIG (IMPORTANT)
-# settings.py
+# CLOUDINARY
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
     'API_KEY': os.getenv("CLOUDINARY_API_KEY"),
     'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
-    'RESOURCE_TYPES': ['image', 'video', 'raw'], 
+    'RESOURCE_TYPES': ['image', 'video', 'raw'],
 }
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # PASSWORD VALIDATORS
@@ -175,16 +172,28 @@ TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES (Render + WhiteNoise)
+# STATIC FILES
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# MEDIA (Cloudinary handles this)
+# MEDIA
+MEDIA_URL = '/media/'
 
+# COOKIES & SESSION — fixes mobile 404/CSRF issues
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = True
+APPEND_SLASH = True
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# SECURITY HEADERS
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # AUTH
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
