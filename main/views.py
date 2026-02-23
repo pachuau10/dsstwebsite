@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import MarqueeItem, Post, FeePayment, Teacher, Department, Lab, GalleryImage, GalleryCategory, Achievement, ContactMessage
+from .models import AdmissionSession, MarqueeItem, Post, FeePayment, Teacher, Department, Lab, GalleryImage, GalleryCategory, Achievement, ContactMessage
 import uuid
 
 
@@ -14,6 +14,8 @@ def home(request):
     featured_achievements = Achievement.objects.filter(is_featured=True)[:6]
     featured_gallery = GalleryImage.objects.filter(is_featured=True)[:8]
     marquee_items = MarqueeItem.objects.filter(is_active=True)
+    session = AdmissionSession.get_active()
+
     context = {
         'pinned_posts': pinned_posts,
         'latest_posts': latest_posts,
@@ -22,6 +24,7 @@ def home(request):
         'featured_achievements': featured_achievements,
         'featured_gallery': featured_gallery,
         'marquee_items': marquee_items,
+
     }
     return render(request, 'main/home.html', context)
 
@@ -181,6 +184,9 @@ def admission(request):
     from .models import AdmissionSession, AdmissionApplication
 
     session = AdmissionSession.get_active()
+    print("DEBUG session:", session)
+    print("DEBUG is_active:", session.is_active if session else "NO SESSION")
+    print("DEBUG admission_open:", session is not None and session.is_active if session else False)
 
     # No active session or admissions closed
     if not session or not session.is_active:

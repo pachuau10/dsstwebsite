@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% block title %}DSST – Excellence in Education{% endblock %}
 {% block og_title %}DSST – Excellence in Education Since 2004{% endblock %}
-{% block og_description %}DSST, Dawrpui, Aizawl – Nurturing young minds with quality education, values, and leadership skills for a brighter tomorrow.{% endblock %}
+{% block og_description %}Darpui School of Science & Technology, Aizawl – Nurturing young minds with quality education, values, and leadership skills for a brighter tomorrow.{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -126,10 +126,14 @@
         <div class="row align-items-center g-4">
             <div class="col-lg-7 mt-0 hero-content">
                 <h1><span>Dawrpui School of Science & Technology</span></h1>
-                <p style="font-size:1rem;color:rgba(255,255,255,0.82);max-width:500px;line-height:1.8;">DSST offers world-class education from Nursery to Class XII, blending academics, sports, arts, and values.</p>
+                <p style="font-size:1rem;color:rgba(255,255,255,0.82);max-width:500px;line-height:1.8;">DSST offers world-class education from class XI to XII Science Sream</p>
                 <div class="d-flex gap-3 flex-wrap mt-4">
                     <a href="/about/" class="btn btn-warning btn-lg px-4 rounded-pill fw-bold">Explore School</a>
+                    {% if admission_open %}
                     <a href="/admission/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Apply Now</a>
+                    {% else %}
+                    <a href="/notices/" class="btn btn-outline-light btn-lg px-4 rounded-pill">Announcement</a>
+                    {% endif %}
                 </div>
                 <div class="row g-2 mt-3">
                     <div class="col-3 stat-box"><div class="num">2500+</div><div class="lbl">Students</div></div>
