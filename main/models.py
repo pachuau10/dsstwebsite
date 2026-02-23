@@ -135,9 +135,7 @@ class Teacher(models.Model):
 class Lab(models.Model):
     LAB_TYPES = [
         ('science','Science Lab'),('physics','Physics Lab'),('chemistry','Chemistry Lab'),
-        ('biology','Biology Lab'),('computer','Computer Lab'),('language','Language Lab'),
-        ('math','Mathematics Lab'),('art','Art & Craft Studio'),('music','Music Room'),
-        ('sports','Sports Facility'),('library','Library'),('other','Other'),
+        ('biology','Biology Lab'),('computer','Computer Lab'),('library','Library'),('other','Other'),
     ]
     name = models.CharField(max_length=100)
     lab_type = models.CharField(max_length=20, choices=LAB_TYPES)

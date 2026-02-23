@@ -29,7 +29,8 @@
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2" style="--bs-breadcrumb-divider-color:rgba(255,255,255,0.5);"><li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);">Home</a></li><li class="breadcrumb-item active text-white">Admission 2024-25</li></ol></nav>
         <h1 style="font-family:'Playfair Display',serif;" class="mb-1">🎓 Admission Portal 2026-27</h1>
-        <p style="color:rgba(255,255,255,0.8);">Apply online for Nursery to Class XII. Simple, fast, and paperless.</p>
+        <p style="color:rgba(255,255,255,0.8);">Apply online for Class XI Science. Choose your subject combination below.</p>
+
         <div class="d-flex gap-3 flex-wrap mt-3">
             <span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-calendar me-1"></i>Forms open: March 1 – March 20, 2026</span>
             <span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 16px;font-size:0.82rem;"><i class="fas fa-file-alt me-1"></i>Admission Test: March 23-24</span>
@@ -103,18 +104,19 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Applying for Class <span class="text-danger">*</span></label>
-                                    <select name="applying_for_class" class="form-select" required>
-                                        <option value="">Select Class</option>
-                                        <option value="nursery">Nursery</option>
-                                        <option value="lkg">LKG</option>
-                                        <option value="ukg">UKG</option>
-                                        {% for i in "123456789" %}
-                                        <option value="{{ i }}">Class {{ i }}</option>
-                                        {% endfor %}
-                                        <option value="10">Class 10</option>
-                                        <option value="11">Class 11</option>
-                                        <option value="12">Class 12</option>
-                                    </select>
+<select name="applying_for_class" class="form-select mb-3" id="comboSelect" required>
+    <option value="">Select Class & Subject Combination</option>
+    <optgroup label="Class XI">
+        <option value="XI-PCMB+Mizo">Class XI — PCMB + Mizo (Physics, Chemistry, Mathematics, Biology, English, Mizo)</option>
+        <option value="XI-PCMCS+Mizo">Class XI — PCMCS + Mizo (Physics, Chemistry, Mathematics, Computer Science, English, Mizo)</option>
+        <option value="XI-PCBCS+Mizo">Class XI — PCBCS + Mizo (Physics, Chemistry, Biology, Computer Science, English, Mizo)</option>
+    </optgroup>
+    <optgroup label="Class XII">
+        <option value="XII-PCMB+Mizo">Class XII — PCMB + Mizo (Physics, Chemistry, Mathematics, Biology, English, Mizo)</option>
+        <option value="XII-PCMCS+Mizo">Class XII — PCMCS + Mizo (Physics, Chemistry, Mathematics, Computer Science, English, Mizo)</option>
+        <option value="XII-PCBCS+Mizo">Class XII — PCBCS + Mizo (Physics, Chemistry, Biology, Computer Science, English, Mizo)</option>
+    </optgroup>
+</select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Previous School</label>
@@ -122,7 +124,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Previous Class Passed</label>
-                                    <input type="text" name="previous_class" class="form-control" placeholder="e.g. Class 5">
+                                    <select name="previous_class" class="form-select">
+    <option value="">Select Board</option>
+    <option>CBSE</option>
+    <option>MBSE (Mizoram Board)</option>
+    <option>ICSE</option>
+    <option>Other State Board</option>
+</select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Marks/Percentage</label>
@@ -263,12 +271,7 @@
 
                 <!-- Fee Structure -->
                 <div class="card p-4 mb-4">
-                    <h6 class="fw-700 mb-3" style="color:var(--primary);"><i class="fas fa-rupee-sign me-2 text-success"></i>Fee Structure</h6>
-                    <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:0.85rem;"><span>Nursery – UKG</span><strong>₹ 3,000/mo</strong></div>
-                    <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:0.85rem;"><span>Class I – V</span><strong>₹ 3,500/mo</strong></div>
-                    <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:0.85rem;"><span>Class VI – VIII</span><strong>₹ 4,000/mo</strong></div>
-                    <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:0.85rem;"><span>Class IX – X</span><strong>₹ 4,500/mo</strong></div>
-                    <div class="d-flex justify-content-between py-2" style="font-size:0.85rem;"><span>Class XI – XII</span><strong>₹ 5,000/mo</strong></div>
+                    <div class="d-flex justify-content-between py-2" style="font-size:0.85rem;"><span>Class XI – XII</span><strong>₹ 3,000/mo</strong></div>
                     <div style="background:#e8f5e9;border-radius:8px;padding:10px;margin-top:12px;font-size:0.8rem;color:#2e7d32;"><i class="fas fa-info-circle me-1"></i>Registration fee ₹200 (non-refundable). One-time admission fee ₹5,000 on selection.</div>
                 </div>
 
